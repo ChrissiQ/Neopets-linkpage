@@ -91,6 +91,14 @@ function dateAddSeconds(n){
 	expires.setSeconds(expires.getSeconds() + n)
 	return expires
 }
+
+function nstTime(){
+	// We want neopets time!!!
+	time = new Date();
+	time2 = new Date();
+	time.setUTCHours(time2.getUTCHours() - time2.getTimezoneOffset()/60 + 5);
+	return time;
+}
 function dateNextDay(){
 	// Returns Date() object of the beginning of the next neopets day.
 	// For daily links. 
