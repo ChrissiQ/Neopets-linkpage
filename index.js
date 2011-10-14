@@ -92,18 +92,17 @@ function dateAddSeconds(n){
 	return expires
 }
 
-function nstTime(){
+function nstOffset(){
 	// We want neopets time!!!
-	time = new Date();
-	time2 = new Date();
-	time.setUTCHours(time2.getUTCHours() - time2.getTimezoneOffset()/60 + 5);
-	return time;
+	// Detects daylight savings so we can offset UTC by NST consistently.
+	
+	
 }
 function dateNextDay(){
 	// Returns Date() object of the beginning of the next neopets day.
 	// For daily links. 
 	expires = new Date()
-	if (expires.getUTCHours() >= 8){
+	if (expires.getUTCHours() >= 7){
 		expires.setUTCDate(expires.getUTCDate() + 1)
 	}
 	expires.setUTCHours(8)
