@@ -63,7 +63,6 @@ function showCountDown(id){
 		<span>Mark Done</span>
 	</h1>
 	<li>
-	
 		<span>
 			<a	id		="healing" 
 				class	="quicklinks" 
@@ -78,9 +77,18 @@ function showCountDown(id){
 		</span>
 	</li>
 	<li>
-		<span>111111111</span>
-		<span>2</span>
-		<span>3</span>
+		<span>
+			<a 	id		="mediocrity" 
+				class	="quicklinks" 
+				href	="http://www.neopets.com/prehistoric/mediocrity.phtml"  
+				target	="_new"
+				onClick	="putCookie('mediocrity', dateAddSeconds(40*60))">Wheel of Mediocrity</a>
+		</span><span>
+			<script language="JavaScript">document.write(showCountDown(0))</script>
+		</span><span>
+			<button onClick="putCookieFromButton('mediocrity', dateAddSeconds(40*60))">Done</button>
+			<button onClick="deleteCookie('mediocrity')">Oops!</button>
+		</span>
 	</li>
 	<li>
 		<span>111111111</span>
