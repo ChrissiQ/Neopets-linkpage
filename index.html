@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/1999/xhtml
+                          http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"
+>
+<head>
+<title>Neopets links!</title>
+ <link rel="stylesheet" type="text/css" href="index.css" />
+ <script type="text/javascript" src="index.js"></script>
+
+</head>
+
+
+
+<body>
+
+<script language="JavaScript">
+
+newTime = new Date()
+msElapsed = new Array()
+
+for (theValue=0;theValue<linkNames.length;theValue++){
+	if (checkCookies(linkNames[theValue])){
+		msElapsed[theValue] = dateFromCookie(linkNames[theValue]).getTime() - newTime.getTime()
+	} else {
+		msElapsed[theValue] = 0;
+	}
+}
+
+function showCountDown(id){
+	// Grabs the time left from cookie.
+	// If no cookie, time left is 00:00:00.
+	if (checkCookies(linkNames[id])){
+		return formatMS(msElapsed[id])
+	} else {
+		return "00:00:00";
+	}
+}
+</script>
+
+
+<div class="title empty">Blah!</div>
+
+<!-- This information is coded as a list, and styled as a table.
+	I am still not sure whether this is the best idea, but I don't
+	think a traditional HTML table suits this application all
+	that well either.  But the code is transparent and easy to
+	read, and the HTML structure is very similar to that of a table
+	anyway.  And I think it is clever.  So I think it is fine.  If
+	you happen to be reading this and have a better idea for me, 
+	please share it with me! red.spam.iahs@gmail.com (Remove .spam.).
+-->
+ 
+ 
+<div class="left_column">
+	<ul id="linklist">
+	<h1>
+		<span>Link</span>
+		<span>Next in</span>
+		<span>Mark Done</span>
+	</h1>
+	<li>
+	
+		<span>
+			<a	id		="healing" 
+				class	="quicklinks" 
+				href	="http://www.neopets.com/faerieland/springs.phtml" 
+				target	="_new" 
+				onClick	="putCookie('healing', dateAddSeconds(30*60))">Healing Springs</a>
+		</span><span>
+			<script language="JavaScript">document.write(showCountDown(0))</script>
+		</span><span>	
+			<button onClick="putCookieFromButton('healing', dateAddSeconds(30*60))">Done</button>
+			<button onClick="deleteCookie('healing')">Oops!</button>
+		</span>
+	</li>
+	<li>
+		<span>111111111</span>
+		<span>2</span>
+		<span>3</span>
+	</li>
+	<li>
+		<span>111111111</span>
+		<span>2</span>
+		<span>3</span>
+	</li>
+	<li id="linkListEndingSpacer">
+	<!-- Empty li required for formatting -->
+	</li>
+	</ul>
+</div>
+
+<div class="second_column">
+	<div class="linkadd"><a href="javascript:addLink();">Add a link.</a></div>
+
+Extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra</div>
+<div class="third_column"><span>Elements</span><span>To</span><span>Add</span></div>
+<div class="empty">
+<span style="color: green; border: 1px solid green; clear: both;">Blah!</span></div>
+</body>
+</html>
