@@ -9,6 +9,7 @@
 <head>
 <title>Neopets links!</title>
  <link rel="stylesheet" type="text/css" href="index.css" />
+ <script type="text/javascript" src="jquery-1.6.4.js"></script>
  <script type="text/javascript" src="index.js"></script>
 
 </head>
@@ -53,9 +54,17 @@ function showCountDown(id){
 	you happen to be reading this and have a better idea for me, 
 	please share it with me! red.spam.iahs@gmail.com (Remove .spam.).
 -->
- 
- 
 <div class="left_column">
+	<div>
+	<script language="JavaScript">
+		var testingToday = new Date();
+		document.write(testingToday.toTimeString());
+		document.write("<br />Your time zone is: " + ((testingToday.getTimezoneOffset())/60).toString() + ".");
+		testingToday.setUTCHours(testingToday.getUTCHours() + nstOffset());
+		document.write("<br />Neopets time is: " + testingToday.toUTCString() + ".");
+	</script>
+	</div>
+	
 	<ul id="linklist">
 	<h1>
 		<span>Link</span>
@@ -63,7 +72,6 @@ function showCountDown(id){
 		<span>Mark Done</span>
 	</h1>
 	<li>
-	
 		<span>
 			<a	id		="healing" 
 				class	="quicklinks" 
@@ -78,19 +86,469 @@ function showCountDown(id){
 		</span>
 	</li>
 	<li>
-		<span>111111111</span>
-		<span>2</span>
-		<span>3</span>
+		<span>
+		<a 	id		="mediocrity" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/prehistoric/mediocrity.phtml"  
+			target	="_new"
+			onClick	="putCookie('mediocrity', dateAddSeconds(40*60))">Wheel of Mediocrity</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(1))</script></span>
+		<!--<span>00:40</span>-->
+		<span><button onClick="putCookieFromButton('mediocrity', dateAddSeconds(40*60))">Done</button>
+			<button onClick="deleteCookie('mediocrity')">Oops!</button></span>
 	</li>
+
 	<li>
-		<span>111111111</span>
-		<span>2</span>
-		<span>3</span>
+		<span>
+		<a 	id		="excitement" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/faerieland/wheel.phtml"  
+			target	="_new"
+			onClick	="putCookie('excitement', dateAddSeconds(2*60*60))">Wheel of Excitement</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(2))</script></span>
+		<!--<span>02:00</span> -->
+		<span><button onClick="putCookieFromButton('excitement', dateAddSeconds(2*60*60))">Done</button>
+			<button onClick="deleteCookie('excitement')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="treasure" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/pirates/buriedtreasure/index.phtml"  
+			target	="_new"
+			onClick	="putCookie('treasure', dateAddSeconds(3*60*60))">Buried Treasure</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(3))</script></span>
+		<!--<span>03:00</span> -->
+		<span><button onClick="putCookieFromButton('treasure', dateAddSeconds(3*60*60))">Done</button>
+			<button onClick="deleteCookie('treasure')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="strength" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/halloween/strtest/index.phtml"  
+			target	="_new"
+			onClick	="putCookie('strength', dateAddSeconds(6*60*60))">Test Your Strength</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(4))</script></span>
+		<!-- <span>06:00</span> -->
+		<span><button onClick="putCookieFromButton('strength', dateAddSeconds(6*60*60))">Done</button>
+			<button onClick="deleteCookie('strength')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="scratch" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/winter/kiosk.phtml"  
+			target	="_new"
+			onClick	="putCookie('scratch', dateAddSeconds(6*60*60))">Scratchcard</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(5))</script></span>
+		<!-- <span>06:00</span> -->
+		<span><button onClick="putCookieFromButton('scratch', dateAddSeconds(6*60*60))">Done</button>
+			<button onClick="deleteCookie('scratch')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="fishing" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/water/fishing.phtml"  
+			target	="_new"
+			onClick	="putCookie('fishing', dateAddSeconds(12*60*60))">Underwater Fishing</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(6))</script></span>
+		<!-- <span>12:00</span> -->
+		<span><button onClick="putCookieFromButton('fishing', dateAddSeconds(12*60*60))">Done</button>
+			<button onClick="deleteCookie('fishing')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="coltzan" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/desert/shrine.phtml"  
+			target	="_new"
+			onClick	="putCookie('coltzan', dateAddSeconds(12*60*60))">Coltzan's Shrine</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(7))</script></span>
+		<!-- <span>12:00</span> -->
+		<span><button onClick="putCookieFromButton('coltzan', dateAddSeconds(12*60*60))">Done</button>
+			<button onClick="deleteCookie('coltzan')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="snowager" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/winter/snowager.phtml"  
+			target	="_new"
+			onClick	="putCookieSnowagerWrapper()">Snowager</a>
+		</span><span>
+		<script language="JavaScript">
+
+		</script>
+		</span>
+		<!-- <span>9AM-10AM<br />5PM-6PM<br />1AM-2AM</span> -->
+		<span><button onClick="putCookieSnowagerWrapper()">Done</button>
+			<button onClick="deleteCookie('snowager')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="potato" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/medieval/potatocounter.phtml"  
+			target	="_new"
+			onClick	="putCookie('potato', dateNextDay())">Potato Counter</a><br />
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(9))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('potato', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('potato')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="meteor" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/moon/meteor.phtml"  
+			target	="_new"
+			onClick	="putCookie('meteor', dateAddSeconds(60*60))">Meteor Crash Site</a><br />(
+			<a 	id	="meteor" 
+				class	="quicklinks" 
+				href	="#" 
+				onClick	="putCookie('meteor', dateNextDay())">Got a prize?  Click --&gt;</a>)<br />
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(10))</script></span>
+		<!-- <span>00:60<br />Daily</span> -->
+		<span><button onClick="putCookieFromButton('meteor', dateAddSeconds(60*60))">No Prize</button><br />
+			<button onClick="putCookieFromButton('meteor', dateNextDay())">Prize</button>
+			<button onClick="deleteCookie('meteor')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="omelette" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/prehistoric/omelette.phtml"  
+			target	="_new"
+			onClick	="putCookie('omelette', dateNextDay())">Giant Omelette</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(12))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('omelette', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('omelette')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="symol" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/medieval/symolhole.phtml"  
+			target	="_new"
+			onClick	="putCookie('symol', dateNextDay())">Symol Hole</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(13))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('symol', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('symol')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="tombola" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/island/tombola.phtml"  
+			target	="_new"
+			onClick	="putCookie('tombola', dateNextDay())">Tiki Tack Tombola</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(14))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('tombola', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('tombola')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="tomb1" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/worlds/geraptiku/tomb.phtml"  
+			target	="_new"
+			onClick	="putCookie('tomb1', dateNextDay())">Deserted Tomb</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(15))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('tomb1', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('tomb1')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="fruit" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/desert/fruitmachine.phtml"  
+			target	="_new"
+			onClick	="putCookie('fruit', dateNextDay())">Fruit Machine</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(16))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('fruit', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('fruit')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="jelly" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/jelly/jelly.phtml"  
+			target	="_new"
+			onClick	="putCookie('jelly', dateNextDay())">Giant Jelly</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(17))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('jelly', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('jelly')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="lab" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/lab.phtml"  
+			target	="_new"
+			onClick	="putCookie('lab', dateNextDay())">Lab Ray</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(18))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('healing', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('healing')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="bank" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/bank.phtml"  
+			target	="_new"
+			onClick	="putCookie('bank', dateNextDay())">Bank (Interest)</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(19))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('bank', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('bank')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="faerie1" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/medieval/earthfaerie.phtml"  
+			target	="_new"
+			onClick	="putCookie('faerie1', dateNextDay())">Earth Faerie Quest</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(20))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('faerie1', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('faerie1')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="faerie2" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/faerieland/darkfaerie.phtml"  
+			target	="_new"
+			onClick	="putCookie('faerie2', dateNextDay())">Dark Faerie Quest</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(20))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('faerie1', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('faerie1')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="stock" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/stockmarket.phtml?type=list&bargain=true"  
+			target	="_new"
+			onClick	="putCookie('stock', dateNextDay())">Stock Market (bargain stocks)</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(22))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('stock', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('stock')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="advent" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/winter/adventcalendar.phtml"  
+			target	="_new"
+			onClick	="putCookie('advent', dateNextDay())">Advent Calendar</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(23))</script></span>
+		<!-- <span>Daily (Dec)</span> -->
+		<span><button onClick="putCookieFromButton('advent', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('advent')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="coconut" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/halloween/coconutshy.phtml"  
+			target	="_new"
+			onClick	="putCookie('coconut', dateNextDay())">Coconut Shy</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(24))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('coconut', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('coconut')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="altador" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/altador/council.phtml"  
+			target	="_new" 
+			onClick	="putCookie('altador', dateNextDay())">Altador Prize</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(25))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('altador', dateNextDay()))">Done</button>
+			<button onClick="deleteCookie('altador')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="slorg" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/shop_of_offers.phtml?slorg_payout=yes"  
+			target	="_new" 
+			onClick	="putCookie('slorg', dateNextDay())">Shop of Offers</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(26))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('slorg', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('slorg')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="marrow" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/medieval/guessmarrow.phtml"  
+			target	="_new" 
+			onClick	="putCookie('marrow', dateNextDay())">Guess the weight of the marrow</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(27))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('marrow', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('marrow')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="lunar" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/shenkuu/lunar/"  
+			target	="_new" 
+			onClick	="putCookie('lunar', dateNextDay())">Lunar Temple</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(28))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('lunar', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('lunar')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="faerie3" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/games/crossword/index.phtml"  
+			target	="_new" 
+			onClick	="putCookie('faerie3', dateNextDay())">Faerie Crossword</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(29))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('faerie3', dateNextDay())">Done</button>
+			<button onClick="deleteCookie('faerie3')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="knowledge" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/medieval/knowledge.phtml"  
+			target	="_new"
+			onClick	="putCookie('knowledge', dateAddSeconds(24*60*60))">Wheel of Knowledge</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(11))</script></span>
+		<!-- <span>Daily</span> -->
+		<span><button onClick="putCookieFromButton('knowledge', dateAddSeconds(24*60*60))">Done</button>
+			<button onClick="deleteCookie('knowledge')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	id		="freebie" 
+			class	="quicklinks" 
+			href	="http://www.neopets.com/freebies/index.phtml" 
+			target	="_new" 
+			onClick="putCookie('freebie', dateNextMonth())">Monthly Freebie</a>
+		</span>
+		<span><script language="JavaScript">document.write(showCountDown(30))</script></span>
+		<!-- <span>Monthly</span> -->
+		<span><button onClick="putCookieFromButton('freebie', dateNextMonth())">Done</button>
+			<button onClick="deleteCookie('freebie')">Oops!</button></span>
+	</li>
+
+	<li>
+		<span>
+		<a 	class	="quicklinks" 
+			href	="http://www.neopets.com/donations.phtml" 
+			target	="_new">Money Tree Giveaways</a>
+		</span>
+		<span>???</span>
+		<!-- <span> 9:00AM<br />Sun 8:50PM<br />Mon 1:45AM/PM</span> -->
+		<span>???</span>
+	</li>
+
+	<li>
+		<span>
+		<a 	class	="quicklinks" 
+			href	="http://www.neopets.com/halloween/witchtower.phtml"
+			target	="_new">Edna's Tower</a>
+		</span>
+		<span>Unlimited</span>
+		<!-- <span>30 min</span> -->
+		<span>Unlimited</span>
+	</li>
+
+	<li>
+		<span>
+		<a 	class	="quicklinks" 
+			href	="http://www.neopets.com/island/kitchen.phtml"
+			target	="_new">Kitchen Quest</a>
+		</span>
+		<span>Unlimited</span>
+		<!-- <span>30 min</span> -->
+		<span>Unlimited</span>
 	</li>
 	<li id="linkListEndingSpacer">
-	<!-- Empty li required for formatting -->
+		<!-- Empty li required for formatting -->
 	</li>
-	</ul>
+</ul>
 </div>
 
 <div class="second_column">
@@ -99,6 +557,12 @@ function showCountDown(id){
 Extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra</div>
 <div class="third_column"><span>Elements</span><span>To</span><span>Add</span></div>
 <div class="empty">
-<span style="color: green; border: 1px solid green; clear: both;">Bloah!</span></div>
+<span style="color: green; border: 1px solid green; clear: both;">Blah!</span></div>
+
+<script language="JavaScript">
+doColourLinks();
+lightUpSnowager('snowager')
+</script>
+
 </body>
 </html>

@@ -109,3 +109,13 @@ a:link.quicklinks{
 a:hover.quicklinks{
 	color: #22ff55;
 }
+
+/* Interactive elements for javascript use */
+
+a:link.unavailable, a:hover.unavailable{
+	color: red;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/* Editing to test! */

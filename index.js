@@ -1,3 +1,5 @@
+/* Editing to test! */
+
 var addedLines = 0;
 
 function addLink(){
@@ -87,15 +89,22 @@ linkNames[30] = "freebie"
 function dateAddSeconds(n){
 	// Returns a Date() object with n seconds added.
 	// Used for links that require timing.
-	expires = new Date()
-	expires.setSeconds(expires.getSeconds() + n)
-	return expires
+	expires = new Date();
+	expires.setSeconds(expires.getSeconds() + n);
+	return expires;
+}
+
+function nstOffset(){
+	// We want neopets time!!!
+	// Detects daylight savings so we can offset UTC by NST consistently. *** NOT YET, working on it
+	return -7;
+	
 }
 function dateNextDay(){
 	// Returns Date() object of the beginning of the next neopets day.
 	// For daily links. 
 	expires = new Date()
-	if (expires.getUTCHours() >= 8){
+	if (expires.getUTCHours() >= nstOffset()){
 		expires.setUTCDate(expires.getUTCDate() + 1)
 	}
 	expires.setUTCHours(8)
@@ -180,12 +189,18 @@ function dateFromCookie(cookieName){
 	return currentTime
 }
 
-function lightItUp(byID){
-	// Light up element with id=byID
+function colourUnavailableLink(byID){
+	// Display unavailable links as red.
 	element = document.getElementById(byID)
 	if (checkCookies(byID)){
-		element.style.color = "red";
-		element.style.fontWeight = "normal";
+		element.addClass("unavailable");
+	}
+}
+
+function doColourLinks(){
+	// Goes through and applies colourUnavailableLink() to unavailable links.
+	for (i = 0; i < linkNames.length;i++)
+		colourUnavailableLink(linkNames(byID))
 	}
 }
 
