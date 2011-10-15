@@ -94,8 +94,8 @@ function dateAddSeconds(n){
 
 function nstOffset(){
 	// We want neopets time!!!
-	// Detects daylight savings so we can offset UTC by NST consistently.
-	return 7;
+	// Detects daylight savings so we can offset UTC by NST consistently. *** NOT YET, working on it
+	return -7;
 	
 }
 function dateNextDay(){

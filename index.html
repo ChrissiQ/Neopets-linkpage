@@ -53,12 +53,16 @@ function showCountDown(id){
 	you happen to be reading this and have a better idea for me, 
 	please share it with me! red.spam.iahs@gmail.com (Remove .spam.).
 -->
- 
- <!-- Hi! -->
+
+<!-- Editing to test!! -->
 <div class="left_column">
 	<div>
 	<script language="JavaScript">
-		document.write(new Date().toTimeString());
+		var testingToday = new Date();
+		document.write(testingToday.toTimeString());
+		document.write("<br />Your time zone is: " + ((testingToday.getTimezoneOffset())/60).toString() + ".");
+		testingToday.setUTCHours(testingToday.getUTCHours() + nstOffset());
+		document.write("<br />Neopets time is: " + testingToday.toUTCString() + ".");
 	</script>
 	</div>
 	<ul id="linklist">
@@ -363,10 +367,10 @@ function showCountDown(id){
 	target	="_new"
 	onClick	="putCookie('faerie2', dateNextDay())">Dark Faerie Quest</a>
 </span>
-<span><script language="JavaScript">document.write(showCountDown(21))</script></span>
+<span><script language="JavaScript">document.write(showCountDown(20))</script></span>
 <!-- <span>Daily</span> -->
-<span><button onClick="putCookieFromButton('faerie2', dateNextDay())">Done</button>
-	<button onClick="deleteCookie('faerie2')">Oops!</button></span>
+<span><button onClick="putCookieFromButton('faerie1', dateNextDay())">Done</button>
+	<button onClick="deleteCookie('faerie1')">Oops!</button></span>
 </li>
 
 <li>
