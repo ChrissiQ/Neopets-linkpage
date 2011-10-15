@@ -98,22 +98,31 @@ div.linkadd{
 ul#linklist li input{
 	width: 25px;
 }
+ul#linklist li button{
+	height: 80%;
+	border: 0;
+}
 
 /* Link colours.  */
 
 
-a:link.quicklinks{
+ul#linklist a:link, 
+ul#linklist a:visited{
 	color: #22cc55;
 	text-decoration: none;
 	font-weight: bold;
 }
-a:hover.quicklinks{
+ul#linklist a:hover, 
+ul#linklist a:visited:hover{
 	color: #22ff55;
 }
 
 /* Interactive elements for javascript use */
 
-a:link.unavailable, a:hover.unavailable{
+ul#linklist a:link.unavailable, 
+ul#linklist a:hover.unavailable, 
+ul#linklist a:visited.unavailable, 
+ul#linklist a:visited:hover.unavailable{
 	color: red;
 	text-decoration: none;
 	font-weight: bold;
