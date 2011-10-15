@@ -1,5 +1,3 @@
-/* Editing to test! */
-
 var addedLines = 0;
 
 function addLink(){
@@ -199,7 +197,7 @@ function colourUnavailableLink(byID){
 
 function doColourLinks(){
 	// Goes through and applies colourUnavailableLink() to unavailable links.
-	for (i = 0; i < linkNames.length;i++)
+	for (i = 0; i < linkNames.length;i++){
 		colourUnavailableLink(linkNames(byID))
 	}
 }
