@@ -107,13 +107,15 @@ ul#linklist li button{
 
 
 ul#linklist a:link, 
-ul#linklist a:visited{
+ul#linklist a:visited,
+ul#linklist a:active{
 	color: #22cc55;
 	text-decoration: none;
 	font-weight: bold;
 }
 ul#linklist a:hover, 
-ul#linklist a:visited:hover{
+ul#linklist a:visited:hover,
+ul#linklist a:active:hover{
 	color: #22ff55;
 }
 
@@ -121,8 +123,10 @@ ul#linklist a:visited:hover{
 
 ul#linklist a:link.unavailable, 
 ul#linklist a:hover.unavailable, 
+ul#linklist a:active.unavailable,
 ul#linklist a:visited.unavailable, 
-ul#linklist a:visited:hover.unavailable{
+ul#linklist a:visited:hover.unavailable,
+ul#linklist a:active:hover.unavailable{
 	color: red;
 	text-decoration: none;
 	font-weight: bold;

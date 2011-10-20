@@ -7,83 +7,50 @@
                           http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"
 >
 <head>
-<title>Neopets links!</title>
- <link rel="stylesheet" type="text/css" href="index.css" />
- <script type="text/javascript" src="jquery-1.6.4.js"></script>
- <script type="text/javascript" src="index.js"></script>
-
-</head>
-
-
-
+<link rel="stylesheet" type="text/css" href="index.css" />
+<script type="text/javascript" src="jquery-1.6.4.js"></script>
+<script type="text/javascript" src="test.js"></script>
+</script>
+<title>Testing</title>
 <body>
 
-<script language="JavaScript">
-
-newTime = new Date()
-msElapsed = new Array()
-
-for (theValue=0;theValue<linkNames.length;theValue++){
-	if (checkCookies(linkNames[theValue])){
-		msElapsed[theValue] = dateFromCookie(linkNames[theValue]).getTime() - newTime.getTime()
-	} else {
-		msElapsed[theValue] = 0;
-	}
-}
-
-function showCountDown(id){
-	// Grabs the time left from cookie.
-	// If no cookie, time left is 00:00:00.
-	if (checkCookies(linkNames[id])){
-		return formatMS(msElapsed[id])
-	} else {
-		return "00:00:00";
-	}
-}
-</script>
-
-
-<div class="title empty">Blah!</div>
-
-<!-- This information is coded as a list, and styled as a table.
-	I am still not sure whether this is the best idea, but I don't
-	think a traditional HTML table suits this application all
-	that well either.  But the code is transparent and easy to
-	read, and the HTML structure is very similar to that of a table
-	anyway.  And I think it is clever.  So I think it is fine.  If
-	you happen to be reading this and have a better idea for me, 
-	please share it with me! red.spam.iahs@gmail.com (Remove .spam.).
--->
-<!-- Comment for test! -->
 <div class="left_column">
-	<div>
-	<script language="JavaScript">
-		var testingToday = new Date();
-		document.write(testingToday.toTimeString());
-		document.write("<br />Your time zone is: " + ((testingToday.getTimezoneOffset())/60).toString() + ".");
-		testingToday.setUTCHours(testingToday.getUTCHours() + nstOffset());
-		document.write("<br />Neopets time is: " + testingToday.toUTCString() + ".");
-	</script>
-	</div>
-	
-	<ul id="linklist">
+<ul>
+<li>Stuff to ignore</li>
+<li>Stuff to ignore 2</li>
+<li>Stuff to ignore 3</li>
+</ul>
+<ul id="linklist">
 	<h1>
 		<span>Link</span>
 		<span>Next in</span>
 		<span>Mark Done</span>
 	</h1>
-	<li>
+	<li>	
 		<span>
-			<a	id		="healing" 
+			<a href="#">Placeholder</a>
+		</span>
+		<span>00:00:00</span>
+		<span>
+			<button></button>
+			<button></button>
+		</span>
+	</li>
+	<li>
+		<script type="text/javascript">
+		document.write(
+					"<span>" +
+					"<a id = " + linkList[0].name + " " + 
+					"   href	='" + linkList[0].url + "' " + 
+					"   onClick ='linkList[0].createCookie()'>" + linkList[0].longName + 
+					"</a>" +
+				"</span>" +
+				"<span>" + linkList[0].nextInString() + "</span>"
 				
-				href	="http://www.neopets.com/faerieland/springs.phtml" 
-				 
-				onClick	="putCookie('healing', dateAddSeconds(30*60))">Healing Springs</a>
-		</span><span>
-			<script language="JavaScript">document.write(showCountDown(0))</script>
-		</span><span>	
-			<button onClick="putCookieFromButton('healing', dateAddSeconds(30*60))">Done</button>
-			<button onClick="deleteCookie('healing')">Oops!</button>
+		);</script></span>
+		<span>	
+		<button onClick="linkList[0].createCookie()">Done</button>
+		<button onClick="linkList[0].deleteCookie()">Oops!</button>
 		</span>
 	</li>
 	<li>
@@ -92,12 +59,12 @@ function showCountDown(id){
 			
 			href	="http://www.neopets.com/prehistoric/mediocrity.phtml"  
 			
-			onClick	="putCookie('mediocrity', dateAddSeconds(40*60))">Wheel of Mediocrity</a>
+			onClick	="putCookie('link1', dateAddSeconds(40*60))">Wheel of Mediocrity</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(1))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!--<span>00:40</span>-->
-		<span><button onClick="putCookieFromButton('mediocrity', dateAddSeconds(40*60))">Done</button>
-			<button onClick="deleteCookie('mediocrity')">Oops!</button></span>
+		<span><button onClick="putCookieFromButton('link1', dateAddSeconds(40*60))">Done</button>
+			<button onClick="deleteCookie('link1')">Oops!</button></span>
 	</li>
 
 	<li>
@@ -106,12 +73,12 @@ function showCountDown(id){
 			
 			href	="http://www.neopets.com/faerieland/wheel.phtml"  
 			
-			onClick	="putCookie('excitement', dateAddSeconds(2*60*60))">Wheel of Excitement</a>
+			onClick	="putCookie('link2', dateAddSeconds(2*60*60))">Wheel of Excitement</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(2))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!--<span>02:00</span> -->
-		<span><button onClick="putCookieFromButton('excitement', dateAddSeconds(2*60*60))">Done</button>
-			<button onClick="deleteCookie('excitement')">Oops!</button></span>
+		<span><button onClick="putCookieFromButton('link2', dateAddSeconds(2*60*60))">Done</button>
+			<button onClick="deleteCookie('link2')">Oops!</button></span>
 	</li>
 
 	<li>
@@ -120,12 +87,12 @@ function showCountDown(id){
 			
 			href	="http://www.neopets.com/pirates/buriedtreasure/index.phtml"  
 			
-			onClick	="putCookie('treasure', dateAddSeconds(3*60*60))">Buried Treasure</a>
+			onClick	="putCookie('link3', dateAddSeconds(3*60*60))">Buried Treasure</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(3))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!--<span>03:00</span> -->
-		<span><button onClick="putCookieFromButton('treasure', dateAddSeconds(3*60*60))">Done</button>
-			<button onClick="deleteCookie('treasure')">Oops!</button></span>
+		<span><button onClick="putCookieFromButton('link3', dateAddSeconds(3*60*60))">Done</button>
+			<button onClick="deleteCookie('link3')">Oops!</button></span>
 	</li>
 
 	<li>
@@ -134,12 +101,12 @@ function showCountDown(id){
 			
 			href	="http://www.neopets.com/halloween/strtest/index.phtml"  
 			
-			onClick	="putCookie('strength', dateAddSeconds(6*60*60))">Test Your Strength</a>
+			onClick	="putCookie('link4', dateAddSeconds(6*60*60))">Test Your Strength</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(4))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>06:00</span> -->
-		<span><button onClick="putCookieFromButton('strength', dateAddSeconds(6*60*60))">Done</button>
-			<button onClick="deleteCookie('strength')">Oops!</button></span>
+		<span><button onClick="putCookieFromButton('link4', dateAddSeconds(6*60*60))">Done</button>
+			<button onClick="deleteCookie('link4')">Oops!</button></span>
 	</li>
 
 	<li>
@@ -150,7 +117,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('scratch', dateAddSeconds(6*60*60))">Scratchcard</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(5))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>06:00</span> -->
 		<span><button onClick="putCookieFromButton('scratch', dateAddSeconds(6*60*60))">Done</button>
 			<button onClick="deleteCookie('scratch')">Oops!</button></span>
@@ -164,7 +131,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('fishing', dateAddSeconds(12*60*60))">Underwater Fishing</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(6))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>12:00</span> -->
 		<span><button onClick="putCookieFromButton('fishing', dateAddSeconds(12*60*60))">Done</button>
 			<button onClick="deleteCookie('fishing')">Oops!</button></span>
@@ -178,7 +145,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('coltzan', dateAddSeconds(12*60*60))">Coltzan's Shrine</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(7))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>12:00</span> -->
 		<span><button onClick="putCookieFromButton('coltzan', dateAddSeconds(12*60*60))">Done</button>
 			<button onClick="deleteCookie('coltzan')">Oops!</button></span>
@@ -192,7 +159,7 @@ function showCountDown(id){
 			
 			onClick	="putCookieSnowagerWrapper()">Snowager</a>
 		</span><span>
-		<script language="JavaScript">
+		<script type="text/javascript">
 
 		</script>
 		</span>
@@ -209,7 +176,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('potato', dateNextDay())">Potato Counter</a><br />
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(9))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('potato', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('potato')">Oops!</button></span>
@@ -227,7 +194,7 @@ function showCountDown(id){
 				href	="#" 
 				onClick	="putCookie('meteor', dateNextDay())">Got a prize?  Click --&gt;</a>)<br />
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(10))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>00:60<br />Daily</span> -->
 		<span><button onClick="putCookieFromButton('meteor', dateAddSeconds(60*60))">No Prize</button><br />
 			<button onClick="putCookieFromButton('meteor', dateNextDay())">Prize</button>
@@ -242,7 +209,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('omelette', dateNextDay())">Giant Omelette</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(12))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('omelette', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('omelette')">Oops!</button></span>
@@ -256,7 +223,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('symol', dateNextDay())">Symol Hole</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(13))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('symol', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('symol')">Oops!</button></span>
@@ -270,7 +237,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('tombola', dateNextDay())">Tiki Tack Tombola</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(14))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('tombola', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('tombola')">Oops!</button></span>
@@ -284,7 +251,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('tomb1', dateNextDay())">Deserted Tomb</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(15))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('tomb1', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('tomb1')">Oops!</button></span>
@@ -298,7 +265,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('fruit', dateNextDay())">Fruit Machine</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(16))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('fruit', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('fruit')">Oops!</button></span>
@@ -312,7 +279,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('jelly', dateNextDay())">Giant Jelly</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(17))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('jelly', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('jelly')">Oops!</button></span>
@@ -326,7 +293,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('lab', dateNextDay())">Lab Ray</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(18))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('healing', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('healing')">Oops!</button></span>
@@ -340,7 +307,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('bank', dateNextDay())">Bank (Interest)</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(19))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('bank', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('bank')">Oops!</button></span>
@@ -354,7 +321,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('faerie1', dateNextDay())">Earth Faerie Quest</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(20))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('faerie1', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('faerie1')">Oops!</button></span>
@@ -368,7 +335,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('faerie2', dateNextDay())">Dark Faerie Quest</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(20))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('faerie1', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('faerie1')">Oops!</button></span>
@@ -382,7 +349,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('stock', dateNextDay())">Stock Market (bargain stocks)</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(22))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('stock', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('stock')">Oops!</button></span>
@@ -396,7 +363,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('advent', dateNextDay())">Advent Calendar</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(23))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily (Dec)</span> -->
 		<span><button onClick="putCookieFromButton('advent', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('advent')">Oops!</button></span>
@@ -410,7 +377,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('coconut', dateNextDay())">Coconut Shy</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(24))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('coconut', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('coconut')">Oops!</button></span>
@@ -424,7 +391,7 @@ function showCountDown(id){
 			 
 			onClick	="putCookie('altador', dateNextDay())">Altador Prize</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(25))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('altador', dateNextDay()))">Done</button>
 			<button onClick="deleteCookie('altador')">Oops!</button></span>
@@ -438,7 +405,7 @@ function showCountDown(id){
 			 
 			onClick	="putCookie('slorg', dateNextDay())">Shop of Offers</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(26))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('slorg', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('slorg')">Oops!</button></span>
@@ -452,7 +419,7 @@ function showCountDown(id){
 			 
 			onClick	="putCookie('marrow', dateNextDay())">Guess the weight of the marrow</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(27))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('marrow', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('marrow')">Oops!</button></span>
@@ -466,7 +433,7 @@ function showCountDown(id){
 			 
 			onClick	="putCookie('lunar', dateNextDay())">Lunar Temple</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(28))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('lunar', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('lunar')">Oops!</button></span>
@@ -480,7 +447,7 @@ function showCountDown(id){
 			 
 			onClick	="putCookie('faerie3', dateNextDay())">Faerie Crossword</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(29))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('faerie3', dateNextDay())">Done</button>
 			<button onClick="deleteCookie('faerie3')">Oops!</button></span>
@@ -494,7 +461,7 @@ function showCountDown(id){
 			
 			onClick	="putCookie('knowledge', dateAddSeconds(24*60*60))">Wheel of Knowledge</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(11))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Daily</span> -->
 		<span><button onClick="putCookieFromButton('knowledge', dateAddSeconds(24*60*60))">Done</button>
 			<button onClick="deleteCookie('knowledge')">Oops!</button></span>
@@ -508,7 +475,7 @@ function showCountDown(id){
 			 
 			onClick="putCookie('freebie', dateNextMonth())">Monthly Freebie</a>
 		</span>
-		<span><script language="JavaScript">document.write(showCountDown(30))</script></span>
+		<span><script type="text/javascript">document.write("Placeholder")</script></span>
 		<!-- <span>Monthly</span> -->
 		<span><button onClick="putCookieFromButton('freebie', dateNextMonth())">Done</button>
 			<button onClick="deleteCookie('freebie')">Oops!</button></span>
@@ -549,21 +516,15 @@ function showCountDown(id){
 	<li id="linkListEndingSpacer">
 		<!-- Empty li required for formatting -->
 	</li>
-</ul>
+	
+	</ul>
+
 </div>
 
-<div class="second_column">
-	<div class="linkadd"><a href="javascript:addLink();">Add a link.</a></div>
-
-Extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra extra</div>
-<div class="third_column"><span>Elements</span><span>To</span><span>Add</span></div>
-<div class="empty">
-<span style="color: green; border: 1px solid green; clear: both;">Blah!</span></div>
-
-<script language="JavaScript">
-doColourLinks();
-lightUpSnowager('snowager')
+<script language="Javascript">
+for (i=0; i<linkList.length; i++){
+addLink();
+}
 </script>
-
 </body>
 </html>
