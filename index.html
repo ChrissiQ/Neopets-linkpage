@@ -9,7 +9,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="index.css" />
 <script type="text/javascript" src="jquery-1.6.4.js"></script>
-<script type="text/javascript" src="test.js"></script>
+<script type="text/javascript" src="index.js"></script>
 </script>
 <title>Testing</title>
 <body>
@@ -59,12 +59,12 @@
 			
 			href	="http://www.neopets.com/prehistoric/mediocrity.phtml"  
 			
-			onClick	="putCookie('link1', dateAddSeconds(40*60))">Wheel of Mediocrity</a>
+			onClick	="linkList[1].createCookie()">Wheel of Mediocrity</a>
 		</span>
-		<span><script type="text/javascript">document.write("Placeholder")</script></span>
+		<span><script type="text/javascript">document.write(linkList[1].nextInString())</script></span>
 		<!--<span>00:40</span>-->
-		<span><button onClick="putCookieFromButton('link1', dateAddSeconds(40*60))">Done</button>
-			<button onClick="deleteCookie('link1')">Oops!</button></span>
+		<span>  <button onClick="linkList[1].createCookie()">Done</button>
+				<button onClick="linkList[1].deleteCookie()">Oops!</button></span>
 	</li>
 
 	<li>
@@ -73,12 +73,12 @@
 			
 			href	="http://www.neopets.com/faerieland/wheel.phtml"  
 			
-			onClick	="putCookie('link2', dateAddSeconds(2*60*60))">Wheel of Excitement</a>
+			onClick	="linkList[2].createCookie()">Wheel of Excitement</a>
 		</span>
-		<span><script type="text/javascript">document.write("Placeholder")</script></span>
+		<span><script type="text/javascript">document.write(linkList[2].nextInString())</script></span>
 		<!--<span>02:00</span> -->
-		<span><button onClick="putCookieFromButton('link2', dateAddSeconds(2*60*60))">Done</button>
-			<button onClick="deleteCookie('link2')">Oops!</button></span>
+		<span><button onClick="linkList[2].createCookie()">Done</button>
+			<button onClick="linkList[2].deleteCookie()">Oops!</button></span>
 	</li>
 
 	<li>
@@ -521,9 +521,9 @@
 
 </div>
 
-<script language="Javascript">
+<script type="text/javascript">
 for (i=0; i<linkList.length; i++){
-addLink();
+addListNode();
 }
 </script>
 </body>

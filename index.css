@@ -61,6 +61,7 @@ ul#linklist{
 }
 
 
+
 /* List formatting (as cells) */
 ul#linklist li span, ul#linklist h1 span{
 	float: left;
@@ -81,6 +82,7 @@ ul#linklist h1 span{
 	background-color: skyblue;
 	border-top: 1px solid black;
 }
+
 
 /* Left column of every row.
    I love that CSS lets me do this! :first-child rocks! */
