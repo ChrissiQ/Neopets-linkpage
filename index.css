@@ -92,7 +92,7 @@ ul#linklist h1 span{
 ul#linklist li span:first-child, ul#linklist h1 span:first-child{
 	clear: both;
 	border-left: 0;
-	width: 11em;
+	width: 16em;
 }
 
 div.linkadd{
