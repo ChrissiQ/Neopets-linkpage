@@ -20,6 +20,35 @@ function chrissiUtils(){
 		return hr + ":" + mn + ":" + sc
 	}
 	this.isEven = function(x){return(x%2)?false:true;}
+	
+	this.updateTimers = function(){
+		//$.each($('ul#linklist li span[2])
+		
+		var parent = $('ul#linklist');
+		var listItem = $('li', parent);
+		var listItemNum
+		var itemSpan
+		var updateLink
+		for (var rewa = 0; rewa < linkObjects.length; rewa++){
+			listItemNum = $($(listItem)[rewa]);
+			itemSpan = $('span', listItemNum);
+			updateLink = $('a', itemSpan);
+			$(itemSpan[1]).text(linkObjects[rewa].nextInString());
+			if (
+				(linkObjects[rewa].cookieExists()) && 
+				(!($(updateLink).hasClass("unavailable")))
+			){
+				$(updateLink).addClass("unavailable");
+			}
+			if (
+				(!(linkObjects[rewa].cookieExists())) &&
+				($(updateLink).hasClass("unavailable"))
+			){
+				$(updateLink).removeClass("unavailable");
+			}
+		}
+	
+	}
 }
 function linkObject(name, passedNumber, duration, longName, url){
 	// The main object representing an individual link on the page.

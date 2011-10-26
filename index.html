@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="index.css" />
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <title>Testing</title>
-<body>
+<body onload="myUtils.updateTimers(); setInterval('myUtils.updateTimers()', 1000 )">
 
 <div class="left_column">
 	<ul id="linklist">
@@ -33,5 +33,8 @@
 
 
 <script type="text/javascript" src="index.js"></script>
+<script type="text/javascript">
+
+</script>
 </body>
 </html>
