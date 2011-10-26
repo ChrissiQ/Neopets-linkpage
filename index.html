@@ -9,26 +9,23 @@
 <head>
 <link rel="stylesheet" type="text/css" href="index.css" />
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-</script>
 <title>Testing</title>
-<body>
+<body onload="myUtils.updateTimers(); setInterval('myUtils.updateTimers()', 1000 )">
 
 <div class="left_column">
-<ul>
-<li>Stuff to ignore</li>
-<li>Stuff to ignore 2</li>
-<li>Stuff to ignore 3</li>
-</ul>
-<ul id="linklist">
-	<h1>
-		<span>Link</span>
-		<span>Next in</span>
-		<span>Mark Done</span>
-	</h1>
-	<li>Lorem ipsum</li>
-	<li id="linkListEndingSpacer">
-		<!-- Empty li required for formatting -->
-	</li>
+	<ul id="linklist">
+	
+		<h1>
+			<span>Link</span>
+			<span>Next in</span>
+			<span>Mark Done</span>
+		</h1>
+		
+		<!-- My DOM is automagically updated with ajax, right in here. -->
+		
+		<li id="linkListEndingSpacer">
+			<!-- Empty li required for formatting -->
+		</li>
 	
 	</ul>
 
@@ -36,6 +33,5 @@
 
 
 <script type="text/javascript" src="index.js"></script>
-<?php print("Test"); ?>
 </body>
 </html>
