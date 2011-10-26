@@ -246,5 +246,29 @@
       "longName":"Monthly Freebie",
       "url":"http://www.neopets.com/freebies/index.phtml",
       "containingElementID":"linklist"
-   }
+   },
+   {
+      "name":"forgottenshore",
+      "numID":31,
+      "duration":"daily",
+      "longName":"Forgotten Shore",
+      "url":"http://www.neopets.com/pirates/forgottenshore.phtml",
+      "containingElementID":"linklist"
+   },
+   {
+	  "name":"obsidianquarry",
+	  "numID":32,
+	  "duration":"daily",
+	  "longName":"Obsidian Quarry",
+	  "url":"http://www.neopets.com/magma/quarry.phtml",
+	  "containingElementID":"linklist"
+	},
+	{
+	  "name":"employment",
+	  "numID":33,
+	  "duration":"daily",
+	  "longName":"Faerieland Employment Agency",
+	  "url":"http://www.neopets.com/faerieland/employ/employment.phtml",
+	  "containingElementID":"linklist"
+	}
 ]

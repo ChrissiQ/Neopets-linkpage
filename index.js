@@ -1,8 +1,8 @@
-function chrissiUtils(){
-	this.addedLines = 0; //Must be global so that it remains constant outside of functions.
-	this.neopetsGMTOffset = 7; // Constant, may change based on Daylight Savings, this is the offset of neopets from GMT.
-	this.formatMS = function(ms){
-		// Formats a number of milliseconds as hr:mn:sc
+function chrissiUtils(){		//	A set of utilities that I am using, inside an object to limit the scope, just for safety.
+	this.addedLines = 0; 		// Used to keep track of how many lines we've added.
+	this.neopetsGMTOffset = 7;	// Constant, may change based on Daylight Savings, this is neopets time offset from GMT.
+	
+	this.formatMS = function(ms){	// Formats a number of milliseconds as hr:mn:sc, for display purposes.
 		var sc = Math.floor(ms / 1000)
 		var mn = 0
 		var hr = 0
@@ -19,11 +19,10 @@ function chrissiUtils(){
 		if (hr < 10){hr = "0" + hr}
 		return hr + ":" + mn + ":" + sc
 	}
-	this.isEven = function(x){return(x%2)?false:true;}
+	this.isEven = function(x){return(x%2)?false:true;}	// Used to find even rows only, for style purposes.
 	
-	this.updateTimers = function(){
-		//$.each($('ul#linklist li span[2])
-		
+	this.updateTimers = function(){						// Function called on body load.  Updates timers as they are clicked.
+														// Also updates the link class when clicked/cookie added/cookie removed.
 		var parent = $('ul#linklist');
 		var listItem = $('li', parent);
 		var listItemNum
@@ -34,17 +33,21 @@ function chrissiUtils(){
 			itemSpan = $('span', listItemNum);
 			updateLink = $('a', itemSpan);
 			$(itemSpan[1]).text(linkObjects[rewa].nextInString());
+			
+			// We need this for the case where a link has not been clicked yet, and the user hits "Done",
+			// Or if the link has already been clicked and the user hits "Oops".
+			// This updates the link's status so that the colouration/etc can change appropriately.
 			if (
-				(linkObjects[rewa].cookieExists()) && 
-				(!($(updateLink).hasClass("unavailable")))
+				(linkObjects[rewa].cookieExists()) && 			// If the timer has started, and
+				(!($(updateLink).hasClass("unavailable")))		// If the class is not yet "unavailable",
 			){
-				$(updateLink).addClass("unavailable");
+				$(updateLink).addClass("unavailable");			// Add the class "unavailable".
 			}
 			if (
-				(!(linkObjects[rewa].cookieExists())) &&
-				($(updateLink).hasClass("unavailable"))
+				(!(linkObjects[rewa].cookieExists())) &&		// If the timer has been stopped, and
+				($(updateLink).hasClass("unavailable"))			// If the class is still "unavailable",
 			){
-				$(updateLink).removeClass("unavailable");
+				$(updateLink).removeClass("unavailable");		// Remove the class "unavailable".
 			}
 		}
 	
@@ -60,8 +63,8 @@ function linkObject(name, passedNumber, duration, longName, url){
 	this.longName = longName;
 	this.url = url;
 	this.containingElementID = "linklist";	// Sets "linklist" as the default ID of list... can change.
-	this.container = $("ul#" + this.containingElementID);
-	this.endingLi = $("li#linkListEndingSpacer", this.existingListContainer);
+	this.container = $("ul#" + this.containingElementID);	// The container element in the DOM.
+	this.endingLi = $("li#linkListEndingSpacer", this.container);	// The ending spacer in the DOM.
 	
 	
 	/* ------- COOKIE FUNCTIONS ------- */
@@ -200,16 +203,13 @@ function linkObject(name, passedNumber, duration, longName, url){
 		$(listEntry).append("<span><a href='" + this.url + "' onclick='linkObjects[" + this.numID + "].createCookie()'>" + this.longName + "</a></span>");
 		$(listEntry).append("<span>" + this.nextInString() + "</span>");
 		$(listEntry).append("<span><button onclick='linkObjects[" + this.numID + "].createCookie()'>Done!</button><button onclick='linkObjects[" + this.numID + "].deleteCookie()'>Oops!</button></span>");
-			//$('button', listEntry)[1].click(this.deleteCookie());
-		
-		
-		
-	/* myUtils.addedLines is a variable that keeps track of how many
-	user-added lines there are.  We need this in order to give
-	each added line a unique name automatically.  Otherwise
-	we would need a long list of names in an array and it
-	would not be extendable! */
-	myUtils.addedLines++;
+
+		/* myUtils.addedLines is a variable that keeps track of how many
+		user-added lines there are.  We need this in order to give
+		each added line a unique name automatically.  Otherwise
+		we would need a long list of names in an array and it
+		would not be extendable! */
+		myUtils.addedLines++;
 	}
 	
 	
@@ -229,6 +229,7 @@ function linkObject(name, passedNumber, duration, longName, url){
 }
 
 var myUtils = new chrissiUtils();
+
 // Wrapper for linkObject() which takes a JSON object as its argument,
 // and creates a new linkObject() with the JSON object's properties.
 linkObjectTakingJSON = function(obj){
@@ -238,6 +239,12 @@ linkObjectTakingJSON = function(obj){
 };					
 linkObjectTakingJSON.prototype = new linkObject();
 
+// Where the magic happens!
+// linkObjects is the array of link objects.  It is pulled
+// from "files.json" as an array of objects.  These objects are
+// then converted to a linkObject with all methods.
+// Then a node is added to the document for each.
+// Using jquery makes this simple to understand!
 var linkObjects = new Array;
 var myJSON = $.getJSON("files.json", function(data){
 	$.each(data, function(index, myObject){
