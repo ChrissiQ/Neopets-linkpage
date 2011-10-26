@@ -60,6 +60,8 @@ function linkObject(name, passedNumber, duration, longName, url){
 	this.longName = longName;
 	this.url = url;
 	this.containingElementID = "linklist";	// Sets "linklist" as the default ID of list... can change.
+	this.container = $("ul#" + this.containingElementID);
+	this.endingLi = $("li#linkListEndingSpacer", this.existingListContainer);
 	
 	
 	/* ------- COOKIE FUNCTIONS ------- */
@@ -139,7 +141,7 @@ function linkObject(name, passedNumber, duration, longName, url){
 			}
 				return expires;
 		}
-		this.cookieExists = function(cookieName){
+		this.cookieExists = function(cookieName){ // Sugar.
 			if (!cookieName){cookieName = "neopets" + this.name;}
 			if (document.cookie.indexOf(cookieName) >=0){
 				return true
@@ -181,56 +183,25 @@ function linkObject(name, passedNumber, duration, longName, url){
 	// Function that adds the object as a node.
 	// containerListID is the ID (as a string) of the container to add nodes to.
 	// If locationToAdd = "start", link is added to start.  Otherwise, added to end.  "end" for convention.
-	this.addNode = function(containerListID, locationToAdd){
-		if (!containerListID){containerListID = this.containingElementID}						//Set default arguments.
-		if ((!locationToAdd) || (locationToAdd != "start" && locationToAdd != "end")){locationToAdd = "end"}
+	this.addNode = function(locationToAdd){
+		if ((!locationToAdd) || (locationToAdd != "start" && locationToAdd != "end")){locationToAdd = "end"}//Set default arguments.
 
-		var existingListContainer = document.getElementById(containerListID); 	//Get container we are adding nodes to.
-		var endingSpacer = document.getElementById('linkListEndingSpacer'); 	//Spacer (hackish) remains at end of list to keep open.
-		var listEntry = document.createElement('li');							//Create node to add.
-		listEntry.setAttribute('id', this.name);
-		if (myUtils.isEven(this.numID)){
-			listEntry.setAttribute('class', 'even');
+		var listEntry = $("<li id='" + this.name + "'></li>");							//Create node to add.
+		if (myUtils.isEven(this.numID)){ 
+			$(listEntry).addClass("even"); 
 		}
 
 		if (locationToAdd == "start"){											//Determine whether we are adding nodes to beginning
-			var entryToPrepend = $('li', existingListContainer)[0];				//	or end of list.  Insert node there.
-			var newEntry = existingListContainer.insertBefore(listEntry, entryToPrepend);
+			$("h1", this.container).after(listEntry);
 		} else {
-			var newEntry = existingListContainer.insertBefore(listEntry, endingSpacer);
+			$(this.endingLi, this.container).before(listEntry);
 		}
 		
-		/* Content! */	
-		var spanForLink = document.createElement('span');
-		newEntry.appendChild(spanForLink);
-			var mainHyperlink = document.createElement('a');
-			mainHyperlink.setAttribute('href', this.url);	
-			mainHyperlink.setAttribute('onClick', 'linkObjects[' + this.numID + '].createCookie()');
-			//$(mainHyperlink).click(this.createCookie());
-					if (this.cookieExists()){
-			mainHyperlink.setAttribute('class', "unavailable");
-		}
-			$(mainHyperlink).text(this.longName);
-		spanForLink.appendChild(mainHyperlink);	
+		$(listEntry).append("<span><a href='" + this.url + "' onclick='linkObjects[" + this.numID + "].createCookie()'>" + this.longName + "</a></span>");
+		$(listEntry).append("<span>" + this.nextInString() + "</span>");
+		$(listEntry).append("<span><button onclick='linkObjects[" + this.numID + "].createCookie()'>Done!</button><button onclick='linkObjects[" + this.numID + "].deleteCookie()'>Oops!</button></span>");
+			//$('button', listEntry)[1].click(this.deleteCookie());
 		
-		
-		var spanForNextIn = document.createElement('span');
-			$(spanForNextIn).text(this.nextInString());
-		newEntry.appendChild(spanForNextIn);
-			
-		
-		var spanForMarkAsDone = document.createElement('span');	
-		newEntry.appendChild(spanForMarkAsDone);
-			var buttonMarkAsDone = document.createElement('button');
-				buttonMarkAsDone.setAttribute('onClick', 'linkObjects[' + this.numID + '].createCookie()');
-				//$(buttonMarkAsDone).click(this.createCookie());
-				$(buttonMarkAsDone).text("Done!");
-		spanForMarkAsDone.appendChild(buttonMarkAsDone);
-			var buttonOops = document.createElement('button');
-				buttonOops.setAttribute('onClick', 'linkObjects[' + this.numID + '].deleteCookie()');
-				//$(buttonOops).click(this.deleteCookie());
-				$(buttonOops).text("Oops");
-		spanForMarkAsDone.appendChild(buttonOops);
 		
 		
 	/* myUtils.addedLines is a variable that keeps track of how many
