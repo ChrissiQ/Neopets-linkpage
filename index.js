@@ -229,6 +229,7 @@ function linkObject(name, passedNumber, duration, longName, url){
 }
 
 var myUtils = new chrissiUtils();
+
 // Wrapper for linkObject() which takes a JSON object as its argument,
 // and creates a new linkObject() with the JSON object's properties.
 linkObjectTakingJSON = function(obj){
@@ -238,6 +239,12 @@ linkObjectTakingJSON = function(obj){
 };					
 linkObjectTakingJSON.prototype = new linkObject();
 
+// Where the magic happens!
+// linkObjects is the array of link objects.  It is pulled
+// from "files.json" as an array of objects.  These objects are
+// then converted to a linkObject with all methods.
+// Then a node is added to the document for each.
+// Using jquery makes this simple to understand!
 var linkObjects = new Array;
 var myJSON = $.getJSON("files.json", function(data){
 	$.each(data, function(index, myObject){
