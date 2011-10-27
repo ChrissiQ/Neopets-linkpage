@@ -21,8 +21,7 @@ function chrissiUtils(){		//	A set of utilities that I am using, inside an objec
 	}
 	this.isEven = function(x){return(x%2)?false:true;}	// Used to find even rows only, for style purposes.
 	
-	this.updateTimers = function(){						// Function called on body load.  Updates timers as they are clicked.
-														// Also updates the link class when clicked/cookie added/cookie removed.
+	this.updateAllTimers = function(){						// Function with setInterval to update all timers every 1 sec
 		var parent = $('ul#linklist');
 		var listItem = $('li', parent);
 		var listItemNum
@@ -33,25 +32,50 @@ function chrissiUtils(){		//	A set of utilities that I am using, inside an objec
 			itemSpan = $('span', listItemNum);
 			updateLink = $('a', itemSpan);
 			$(itemSpan[1]).text(linkObjects[rewa].nextInString());
-			
-			// We need this for the case where a link has not been clicked yet, and the user hits "Done",
-			// Or if the link has already been clicked and the user hits "Oops".
-			// This updates the link's status so that the colouration/etc can change appropriately.
-			if (
-				(linkObjects[rewa].cookieExists()) && 			// If the timer has started, and
-				(!($(updateLink).hasClass("unavailable")))		// If the class is not yet "unavailable",
-			){
-				$(updateLink).addClass("unavailable");			// Add the class "unavailable".
-			}
-			if (
-				(!(linkObjects[rewa].cookieExists())) &&		// If the timer has been stopped, and
-				($(updateLink).hasClass("unavailable"))			// If the class is still "unavailable",
-			){
-				$(updateLink).removeClass("unavailable");		// Remove the class "unavailable".
-			}
 		}
 	
 	}
+	
+	this.addSortCookie = function(tag){		// Tag takes "alphabet", "
+			var nextYear = new Date();
+			nextYear.setFullYear(nextYear.getFullYear() + 1);
+			document.cookie = "sortingmethod=" + tag + "; expires=" + nextYear + "; path=/";
+	}
+	
+	this.sortListBy = function(tag){
+		console.log("Before: ");
+		console.log(linkObjects);
+		if (tag === "alpha"){
+			linkObjects.sort(function(a,b){
+				if (a.longName > b.longName){
+					return 1;
+				} else {
+					return -1;
+				}
+			})
+		} else {
+			linkObjects.sort(function(a,b){
+			})	
+		}
+	this.addSortCookie();
+	console.log("After: ");
+	console.log(linkObjects);
+	}
+	
+	this.updateTimer = function(createOrDelete, aElement, timerElement, liElement, linkList){		
+	for (var m = 0; m<linkList.length; m++){
+		if ($(liElement).is("#" + linkList[m].name)){
+			if (createOrDelete == "create"){
+				linkList[m].createCookie();
+				aElement.addClass("unavailable");
+				timerElement.text(linkObjects[m].nextInString());
+			}
+			if (createOrDelete === "delete"){
+				linkList[m].deleteCookie();
+				timerElement.text(linkObjects[m].nextInString());
+				aElement.removeClass("unavailable");
+			}
+}}}
 }
 function linkObject(name, passedNumber, duration, longName, url){
 	// The main object representing an individual link on the page.
@@ -156,11 +180,10 @@ function linkObject(name, passedNumber, duration, longName, url){
 			if (!availableIn){availableIn = this.duration;}
 			document.cookie = "neopets" + this.name + "=" + this.availableDate(availableIn).toUTCString() + "; expires=" + this.availableDate(availableIn).toUTCString() + "; path=/";
 		}
-		this.deleteCookie = function(myValue){	
-			if (!myValue){myValue = this.duration;}
+		this.deleteCookie = function(){	
 			var time = new Date()
 			time.setSeconds(time.getSeconds() - 5)
-			document.cookie = "neopets" + this.name + "=" + myValue + "; expires=" + time.toUTCString() + "; path=/";
+			document.cookie = "neopets" + this.name + "=" + time.toUTCString() + "; expires=" + time.toUTCString() + "; path=/";
 		}
 		this.readCookie = function(cookieName){
 			if (!cookieName){cookieName = "neopets" + this.name;}
@@ -189,20 +212,23 @@ function linkObject(name, passedNumber, duration, longName, url){
 	this.addNode = function(locationToAdd){
 		if ((!locationToAdd) || (locationToAdd != "start" && locationToAdd != "end")){locationToAdd = "end"}//Set default arguments.
 
-		var listEntry = $("<li id='" + this.name + "'></li>");							//Create node to add.
+		var listEntry = $("<li id='" + this.name + "'></li>");	//Create node to add.
 		if (myUtils.isEven(this.numID)){ 
 			$(listEntry).addClass("even"); 
 		}
 
-		if (locationToAdd == "start"){											//Determine whether we are adding nodes to beginning
+		if (locationToAdd == "start"){		//Determine whether we are adding nodes to beginning
 			$("h1", this.container).after(listEntry);
 		} else {
 			$(this.endingLi, this.container).before(listEntry);
 		}
 		
-		$(listEntry).append("<span><a href='" + this.url + "' onclick='linkObjects[" + this.numID + "].createCookie()'>" + this.longName + "</a></span>");
+		$(listEntry).append("<span><a href='" + this.url + "'>" + this.longName + "</a></span>");
+			if (this.cookieExists()){
+				$('a', $('span', listEntry)[0]).addClass("unavailable");
+			}
 		$(listEntry).append("<span>" + this.nextInString() + "</span>");
-		$(listEntry).append("<span><button onclick='linkObjects[" + this.numID + "].createCookie()'>Done!</button><button onclick='linkObjects[" + this.numID + "].deleteCookie()'>Oops!</button></span>");
+		$(listEntry).append("<span><button>Done!</button><button>Oops!</button></span>");
 
 		/* myUtils.addedLines is a variable that keeps track of how many
 		user-added lines there are.  We need this in order to give
@@ -248,7 +274,47 @@ linkObjectTakingJSON.prototype = new linkObject();
 var linkObjects = new Array;
 var myJSON = $.getJSON("files.json", function(data){
 	$.each(data, function(index, myObject){
-		linkObjects[index] = new linkObjectTakingJSON(myObject);
-		linkObjects[index].addNode();
+		spot = myObject.numID;
+		linkObjects[spot] = new linkObjectTakingJSON(myObject);
 	})
-});
+	for (x=0;x<linkObjects.length;x++){
+		linkObjects[x].addNode();
+	}
+})
+
+$('body').click(function(clickEvent){
+	if ($(clickEvent.target).is('a', 'li', 'ul#linklist')){				// onclick 'a' list item....
+		var myA = $(clickEvent.target);
+		var myASpan = $(myA.parent());
+		var myLi = $(myASpan.parent());
+		var myTimerSpan = $(myASpan.next());
+		myUtils.updateTimer("create",myA,myTimerSpan,myLi,linkObjects);
+	}
+	if ($(clickEvent.target).is('a', 'h1', 'ul#linklist')){				// onclick sorting symbol...
+		var myA = $(clickEvent.target);
+		var myASpan = $(myA.parent());
+		if ($(myASpan).is($(":firstchild"))){
+			myUtils.sortListBy("alpha");
+		} else {
+			myUtils.sortListBy("time");
+		}
+	}
+	if ($(clickEvent.target).is("button", 'ul#linklist')){ 				// onclick 'button'...
+		var myButton = $(clickEvent.target);
+		var myButtonSpan = $(myButton.parent());
+		var myLi = $(myButtonSpan.parent());
+		var myTimerSpan = $(myButtonSpan.prev());
+		var myASpan = $(myTimerSpan.prev());
+		var myA = $('a', myASpan);
+		if ($(clickEvent.target).text() == "Oops!"){
+			myUtils.updateTimer("delete",myA,myTimerSpan,myLi,linkObjects);
+		} else {
+			myUtils.updateTimer("create",myA,myTimerSpan,myLi,linkObjects);
+		}
+	}
+})
+	
+setInterval( function () {
+	myUtils.updateAllTimers();
+	}, 1000
+);

@@ -107,28 +107,43 @@ ul#linklist li button{
 /* Link colours.  */
 
 
-ul#linklist a:link, 
-ul#linklist a:visited,
-ul#linklist a:active{
+ul#linklist li a:link, 
+ul#linklist li a:visited,
+ul#linklist li a:active{
 	color: #19962d;
 	text-decoration: none;
 	font-weight: bold;
 }
-ul#linklist a:hover, 
-ul#linklist a:visited:hover,
-ul#linklist a:active:hover{
+ul#linklist li a:hover, 
+ul#linklist li a:visited:hover,
+ul#linklist li a:active:hover{
 	color: #19962d;
 }
 
 /* Interactive elements for javascript use */
 
-ul#linklist a:link.unavailable, 
-ul#linklist a:hover.unavailable, 
-ul#linklist a:active.unavailable,
-ul#linklist a:visited.unavailable, 
-ul#linklist a:visited:hover.unavailable,
-ul#linklist a:active:hover.unavailable{
+ul#linklist li a:link.unavailable, 
+ul#linklist li a:hover.unavailable, 
+ul#linklist l ia:active.unavailable,
+ul#linklist li a:visited.unavailable, 
+ul#linklist li a:visited:hover.unavailable,
+ul#linklist li a:active:hover.unavailable{
 	color: red;
 	text-decoration: none;
 	font-weight: normal;
+}
+
+/* Sorting triangle links */
+
+ul#linklist h1 a:link,
+ul#linklist h1 a:visited,
+ul#linklist li a:active{
+	color: black;
+	text-decoration: none;
+	font-weight: normal;
+}
+ul#linklist h1 a:hover,
+ul#linklist h1 a:visited:hover,
+ul#linklist h1 a:active:hover{
+	color: gray;
 }
