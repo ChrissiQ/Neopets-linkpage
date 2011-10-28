@@ -241,7 +241,7 @@
    },
    {
       "name":"monthlyfreebie",
-      "numID":30,
+      "numID":33,
       "duration":"monthly",
       "longName":"Monthly Freebie",
       "url":"http://www.neopets.com/freebies/index.phtml",
@@ -265,7 +265,7 @@
 	},
 	{
 	  "name":"employment",
-	  "numID":33,
+	  "numID":30,
 	  "duration":"daily",
 	  "longName":"Faerieland Employment Agency",
 	  "url":"http://www.neopets.com/faerieland/employ/employment.phtml",
