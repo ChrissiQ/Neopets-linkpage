@@ -57,6 +57,14 @@
 		return cookieContents;
 	}
 	
+	this.hasCookie = function(cookieName){ // Sugar.
+			if (document.cookie.indexOf(cookieName) >=0){
+				return true
+			} else {
+				return false
+			}
+		}
+	
 	this.sortListBy = function(tag){
 		var sortedArray = linkObjects.slice(0);
 		if (tag === "alpha"){
@@ -301,7 +309,10 @@ var myJSON = $.getJSON("files.json", function(data){
 		spot = myObject.numID;
 		linkObjects[spot] = new linkObjectTakingJSON(myObject);
 	})
+	
+	if (myUtils.hasCookie("sortingmethod")){
 	myUtils.sortListBy(myUtils.getCookie("sortingmethod"));
+	}
 	
 	for (x=0;x<linkObjects.length;x++){
 		linkObjects[x].addNode(x);
