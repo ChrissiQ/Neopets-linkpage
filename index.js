@@ -1,5 +1,4 @@
-﻿function chrissiUtils(){		//	A set of utilities that I am using, inside an object to limit the scope, just for safety.
-	this.addedLines = 0; 		// Used to keep track of how many lines we've added.
+﻿var chrissiUtils = new function(){		//	A set of utilities that I am using, inside an object to limit the scope, just for safety.
 	this.neopetsGMTOffset = 7;	// Constant, may change based on Daylight Savings, this is neopets time offset from GMT.
 	
 	this.formatMS = function(ms){	// Formats a number of milliseconds as hr:mn:sc, for display purposes.
@@ -18,11 +17,87 @@
 		if (mn < 10){mn = "0" + mn}
 		if (hr < 10){hr = "0" + hr}
 		return hr + ":" + mn + ":" + sc
+	}	
+	this.sortListBy = function(listArray, tag){
+		if (tag === "alpha"){
+			listArray.sort(function(a,b){
+				if (a.longName > b.longName){
+					return 1;
+				} else {
+					return -1;
+				}
+			})
+		} else {
+			listArray.sort(function(a,b){
+				return a.nextIn() - b.nextIn();
+			})	
+		}
+		
+		cookieUtils.addSortCookie(tag);
 	}
-	this.isEven = function(x){return(x%2)?false:true;}	// Used to find even rows only, for style purposes.
 	
-	this.updateAllTimers = function(){						// Function with setInterval to update all timers every 1 sec
-		var parent = $('ul#linklist');
+	// Refresh the list's DOM elements.  Useful to display a new sorted list.
+	
+	// Clear out a list of all items.
+	this.clearList = function (listID){
+		var list = $("ul#" + listID);
+		$(list).find('li').not('.permanent').remove();
+	}
+	
+	this.createNewEmptyList = function(listID, listName){
+		$('#infoColumn').before($(
+			"<div class='column'>" +
+			"<span>" + listName + "</span>" +
+			"<ul class='linklist' id='" + listID + "'></ul></div>"
+		));
+		$('#' + listID).append($(
+		"<h1 class='permanent'>" + 
+			"<span><a href='#' class='remove'>-</a></span>" +
+			"<span class='link'>Name<a href='#'>▼</a></span>" +
+			"<span>Next in<a href='#'>▼</a></span>" +
+			"<span>Mark Done</span>" +
+		"</h1>"
+		));
+		$('#' + listID).append($(
+		"<li class='addnew permanent'><span><a href='#' class='add'>+</a></span></li>"+
+		"<li class='endingSpacer permanent'></li>"	
+		));
+		
+	}
+		
+	
+	// Load list items from listArray, into listID list.
+	this.loadList = function (listID, listArray){
+		var list = $("body").find($("ul#" + listID));
+		for (y=0;y<listArray.length;y++){
+			listArray[y].addNode(y);
+		}
+	$($('li:odd').addClass("odd"));
+	}
+	
+	// Clear a list, then reload it with new information.
+	this.reloadList = function(listID, listArray){
+		this.clearList(listID);
+		this.loadList(listID, listArray);
+	}
+	
+	// Update a timer when information changes.
+	this.updateTimer = function(createOrDelete, aElement, timerElement, liElement, linkList){		
+	for (var m = 0; m<linkList.length; m++){
+		if ($(liElement).is("#neopets" + linkList[m].name)){
+			if (createOrDelete === "delete"){
+				linkList[m].deleteCookie();
+				aElement.removeClass("unavailable");
+			}else{
+				linkList[m].addCookie();
+				aElement.addClass("unavailable");
+			}
+			timerElement.text(linkObjects[m].nextInString());
+	}}}
+	
+	// Get the current status of all timers.
+	this.updateAllTimers = function(){
+		var parent = $('ul.linklist');
 		var listItem = $('li', parent);
 		var listItemNum
 		var itemSpan
@@ -31,18 +106,40 @@
 			listItemNum = $($(listItem)[rewa]);
 			itemSpan = $('span', listItemNum);
 			updateLink = $('a', itemSpan);
-			$(itemSpan[1]).text(linkObjects[rewa].nextInString());
+			$(itemSpan[2]).text(linkObjects[rewa].nextInString());
 		}
 	
 	}
-	
-	this.addSortCookie = function(tag){		// Tag takes "alpha", or "time" or anything else for time-left order."
-		var nextYear = new Date();
-		nextYear.setFullYear(nextYear.getFullYear() + 1);
-		document.cookie = "sortingmethod=" + tag + "; expires=" + nextYear + "; path=/";
+}
+
+var cookieUtils = new function(){
+
+	this.exists = function(cookieName){ // Sugar.
+		if (document.cookie.indexOf(cookieName) >=0){
+			return true
+		} else {
+			return false
+		}
+	}		
+	this.cookieString = function(cookieName,cookieValue,expiryDate){
+		return cookieName + "=" + cookieValue + "; expires=" + expiryDate + "; path=/";
+	}
+	this.add = function(cookieName,cookieValue,expiryDate){		// Tag takes "alpha", or "time" or anything else for time-left order."
+		document.cookie = this.cookieString(cookieName,cookieValue,expiryDate);
+	}
+	this.del = function(cookieName){	
+		var time = new Date()
+		time.setSeconds(time.getSeconds() - 5)
+		document.cookie = this.cookieString(cookieName,time.toUTCString(),time.toUTCString());
 	}
 	
-	this.getCookie = function(cookieName){
+	this.addSortCookie = function(sortType){
+		var nextYear = new Date();
+		nextYear.setFullYear(nextYear.getFullYear() + 1);
+		this.add("sortingmethod",sortType,nextYear);
+	}
+	
+	this.getValue = function(cookieName){
 		var wholeCookie = unescape(document.cookie);
 		var cookies = wholeCookie.split(';');
 		var cookieContents = "";
@@ -56,64 +153,8 @@
 		}
 		return cookieContents;
 	}
-	
-	this.hasCookie = function(cookieName){ // Sugar.
-			if (document.cookie.indexOf(cookieName) >=0){
-				return true
-			} else {
-				return false
-			}
-		}
-	
-	this.sortListBy = function(tag){
-		var sortedArray = linkObjects.slice(0);
-		if (tag === "alpha"){
-			sortedArray.sort(function(a,b){
-				if (a.longName > b.longName){
-					return 1;
-				} else {
-					return -1;
-				}
-			})
-		} else {
-			sortedArray.sort(function(a,b){
-				return a.nextIn() - b.nextIn();
-			})	
-		}
-		if (sortedArray == linkObjects){
-			linkObjects.reverse();
-		} else {
-			linkObjects = sortedArray.slice(0);
-		}
-		this.addSortCookie(tag);
-	}
-	
-	this.updateTimer = function(createOrDelete, aElement, timerElement, liElement, linkList){		
-	for (var m = 0; m<linkList.length; m++){
-		if ($(liElement).is("#" + linkList[m].name)){
-			if (createOrDelete == "create"){
-				linkList[m].createCookie();
-				aElement.addClass("unavailable");
-				timerElement.text(linkObjects[m].nextInString());
-			}
-			if (createOrDelete === "delete"){
-				linkList[m].deleteCookie();
-				timerElement.text(linkObjects[m].nextInString());
-				aElement.removeClass("unavailable");
-			}
-	}}}
-	
-	this.reloadList = function(listElementName, listArray){
-		var listElement = $("ul#" + listElementName);
-		$(listElement).empty();
-		myUtils.addedLines = 0;
-		$(listElement).append("<h1><span>Link<a href='#'>▼</a> </span><span>Next in<a href='#'>▼</a> </span><span>Mark Done</span></h1>");
-		for (y=0;y<linkObjects.length;y++){
-			$(linkObjects[y].container).append($(linkObjects[y].thisNode(y)));
-		}
-		$(listElement).append("<li id='linkListEndingSpacer'></li>");
-	}
 }
+
 function linkObject(name, passedNumber, duration, longName, url){
 	// The main object representing an individual link on the page.
 	// There are no defaults since we are creating unique objects.
@@ -123,156 +164,140 @@ function linkObject(name, passedNumber, duration, longName, url){
 	this.duration = duration;
 	this.longName = longName;
 	this.url = url;
-	this.containingElementID = "linklist";	// Sets "linklist" as the default ID of list... can change.
+	this.containingElementID = "defaultList";	// Sets "linklist" as the default ID of list... can change.
 	this.container = $("ul#" + this.containingElementID);	// The container element in the DOM.
-	this.endingLi = $("li#linkListEndingSpacer", this.container);	// The ending spacer in the DOM.
+	this.endingLi = $("li.addnew", this.container);	// The ending spacer in the DOM.
 	
-	
-	/* ------- COOKIE FUNCTIONS ------- */
-		this.availableDate = function(dur){		// Returns an expiry date based on the current time + dur seconds.
-			if (!dur){dur = this.duration;}		// Or if the duration is not a time but a fixed date,
-			expires = new Date();				// Return that fixed date, properly formatted as a date.
-			Today = new Date();					// All dates need to be in Neopian time which is PDT!
-			
-	
-	
-			if (dur=="daily"){										// Daily case
-				expires.setSeconds(0);
-				expires.setMinutes(0);
-				expires.setUTCHours(myUtils.neopetsGMTOffset);
-				if (Today.getUTCHours() >= myUtils.neopetsGMTOffset){ //Midnight neopets time
-					expires.setDate(Today.getUTCDate() +1);
-				}
-
-				
-			} else if (dur == "monthly"){							// Monthly case
-				expires.setSeconds(0);
-				expires.setMinutes(0);
-				expires.setUTCHours(myUtils.neopetsGMTOffset);
-				expires.setDate(1);
-				if (Today.getUTCHours() >= myUtils.neopetsGMTOffset){ //Midnight neopets time
-					expires.setMonth(Today.getUTCMonth()+1);
-				}
-				
-				
-			} else if (dur == "snowager"){								// Snowager case
-				expires.setSeconds(0);									// Can be REALLY confusing.
-				expires.setMinutes(0);									// 6-7am, 2-3pm, and 10-11pm neopian time (PDT)
-
-				
-				//Case after 6am and before 2pm.
-				if (
-					(Today.getUTCHours() >= myUtils.neopetsGMTOffset + 6) && 
-					(Today.getUTCHours() < myUtils.neopetsGMTOffset + 14)		// 2pm neopets time is 9pm same day UTC
-				){														// Set expiry to 2pm (9pm same day UTC)
-					expires.setUTCHours(Today.getUTCHours()+myUtils.neopetsGMTOffset+14);
-				} else
-				
-				
-				//Case after 2pm and before 10pm.
-				if (
-					(Today.getUTCHours() >= myUtils.neopetsGMTOffset + 14) ||	// We use OR because it spans two days.
-					(Today.getUTCHours() < myUtils.neopetsGMTOffset -2)			// 2pm neopets time is 9pm same day UTC
-				){														//10pm neopets time is 5am next day UTC								
-					// Set expiry to 5am UTC tomorrow if it is before midnight UTC
-					
-					// Set expiry to 5am UTC same day if it is after midnight UTC.
-				
-				//If it is after 10pm and before 6am.
-					//10pm neopets time is 5am 		next day UTC.
-					// 6am neopets time is 1pm same day UTC
-					// Set expiry to 1pm tomorrow if it is before midnight UTC.
-					// Set expiry to 1pm same day if it is after midnight UTC.
-				}
-			} else if (dur == "decemberdaily"){						// Advent calendar case	
-					expires.setSeconds(0);
-					expires.setMinutes(0);
-					expires.setUTCHours(7);
-				if (Today.getUTCMonth() == 11){	
-					if (Today.getDate() == 31){
-						expires.setFullYear(Today.getFullYear()+1);
-					} else {
-					expires.setDate(Today.getUTCDate() +1);
-					}
-				} else {
-					expires.setDate(1);
-					expires.setMonth(11);
-				}
-				
-				
-			} else {												// Duration as # of seconds case.
-				expires.setSeconds(Today.getSeconds() + dur);
-			}
-				return expires;
-		}
-		this.cookieExists = function(cookieName){ // Sugar.
-			if (!cookieName){cookieName = "neopets" + this.name;}
-			if (document.cookie.indexOf(cookieName) >=0){
-				return true
-			} else {
-				return false
-			}
-		}
-		this.createCookie = function(availableIn){
-			if (!availableIn){availableIn = this.duration;}
-			document.cookie = "neopets" + this.name + "=" + this.availableDate(availableIn).toUTCString() + "; expires=" + this.availableDate(availableIn).toUTCString() + "; path=/";
-		}
-		this.deleteCookie = function(){	
-			var time = new Date()
-			time.setSeconds(time.getSeconds() - 5)
-			document.cookie = "neopets" + this.name + "=" + time.toUTCString() + "; expires=" + time.toUTCString() + "; path=/";
-		}
-		this.expiryCookie = function(cookieName){
-			if (!cookieName){cookieName = "neopets" + this.name;}
-			return myUtils.getCookie(cookieName);
-		}
+	// Returns an expiry date based on the current time + dur seconds.
+	this.availableDate = function(dur){		
+		if (!dur){dur = this.duration;}		// Or if the duration is not a time but a fixed date,
+		expires = new Date();				// Return that fixed date, properly formatted as a date.
+		Today = new Date();					// All dates need to be in Neopian time which is PDT!
 		
-		this.deleteNode = function(numInArray){
-			$($("li", this.container)[numInArray]).remove();
-		}
-	/* ------- END COOKIE FUNCTIONS ------- */
 
-	// Function that adds the object as a node.
-	// containerListID is the ID (as a string) of the container to add nodes to.
-	// If locationToAdd = "start", link is added to start.  Otherwise, added to end.  "end" for convention.
-	
-	this.thisNode = function(arrayNum){
-		var listEntry = $("<li id='" + this.name + "'></li>");	//Create node to add.
-		if (myUtils.isEven(arrayNum)){ 
-			$(listEntry).addClass("even"); 
+
+		if (dur=="daily"){										// Daily case
+			expires.setSeconds(0);
+			expires.setMinutes(0);
+			expires.setUTCHours(chrissiUtils.neopetsGMTOffset);
+			if (Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset){ //Midnight neopets time
+				expires.setDate(Today.getUTCDate() +1);
+			}
+
+			
+		} else if (dur == "monthly"){							// Monthly case
+			expires.setSeconds(0);
+			expires.setMinutes(0);
+			expires.setUTCHours(chrissiUtils.neopetsGMTOffset);
+			expires.setDate(1);
+			if (Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset){ //Midnight neopets time
+				expires.setMonth(Today.getUTCMonth()+1);
+			}
+			
+			
+		} else if (dur == "snowager"){								// Snowager case
+			expires.setSeconds(0);									// Can be REALLY confusing.
+			expires.setMinutes(0);									// 6-7am, 2-3pm, and 10-11pm neopian time (PDT)
+
+			
+			//Case after 6am and before 2pm.
+			if (
+				(Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset + 6) && 
+				(Today.getUTCHours() < chrissiUtils.neopetsGMTOffset + 14)		// 2pm neopets time is 9pm same day UTC
+			){														// Set expiry to 2pm (9pm same day UTC)
+				expires.setUTCHours(Today.getUTCHours()+chrissiUtils.neopetsGMTOffset+14);
+			} else
+			
+			
+			//Case after 2pm and before 10pm.
+			if (
+				(Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset + 14) ||	// We use OR because it spans two days.
+				(Today.getUTCHours() < chrissiUtils.neopetsGMTOffset -2)			// 2pm neopets time is 9pm same day UTC
+			){														//10pm neopets time is 5am next day UTC								
+				// Set expiry to 5am UTC tomorrow if it is before midnight UTC
+				
+				// Set expiry to 5am UTC same day if it is after midnight UTC.
+			
+			//If it is after 10pm and before 6am.
+				//10pm neopets time is 5am 		next day UTC.
+				// 6am neopets time is 1pm same day UTC
+				// Set expiry to 1pm tomorrow if it is before midnight UTC.
+				// Set expiry to 1pm same day if it is after midnight UTC.
+			}
+		} else if (dur == "decemberdaily"){						// Advent calendar case	
+				expires.setSeconds(0);
+				expires.setMinutes(0);
+				expires.setUTCHours(7);
+			if (Today.getUTCMonth() == 11){	
+				if (Today.getDate() == 31){
+					expires.setFullYear(Today.getFullYear()+1);
+				} else {
+				expires.setDate(Today.getUTCDate() +1);
+				}
+			} else {
+				expires.setDate(1);
+				expires.setMonth(11);
+			}
+			
+			
+		} else {												// Duration as # of seconds case.
+			expires.setSeconds(Today.getSeconds() + dur);
 		}
-		$(listEntry).append("<span><a href='" + this.url + "'>" + this.longName + "</a></span>");
-		if (this.cookieExists()){
-			$('a', $('span', listEntry)[0]).addClass("unavailable");
+			return expires;
+	}
+
+	// Adds cookie with appropriate expiry date.
+	this.addCookie = function(availableIn){
+		if (!availableIn){availableIn = this.duration;}
+		cookieUtils.add(
+			"neopets" + this.name,
+			this.availableDate(availableIn).toUTCString(),
+			this.availableDate(availableIn).toUTCString()
+		);
+	}
+	// Deletes cookie specific to this element.
+	this.deleteCookie = function(){	
+		cookieUtils.del("neopets" + this.name);
+	}
+	// Get the expiry date from the cookie.
+	this.available = function(){
+		return cookieUtils.getValue("neopets" + this.name);
+	}
+	// Not being used yet... not sure if functional.  Deletes the node off the DOM tree.
+	this.deleteNode = function(numInArray){
+		$($("li", this.container)[numInArray]).remove();
+	}
+	
+	// Generate and return the structure of the list element.  Does not add to DOM, just generates and returns.
+	this.elementHTML = function(arrayNum){			
+		var listEntry = $("<li id='neopets" + this.name + "'></li>");
+		$(listEntry).append("<span><a href='#' class='remove'>-</a></span>");
+		$(listEntry).append("<span class='link'><a href='" + this.url + "'>" + this.longName + "</a></span>");
+		if (cookieUtils.exists("neopets" + this.name)){
+			$('a', $('span', listEntry)[1]).addClass("unavailable");
 		}
 		$(listEntry).append("<span>" + this.nextInString() + "</span>");
 		$(listEntry).append("<span><button>Done!</button><button>Oops!</button></span>");
 		return $(listEntry);
 	}
 	
+	//Add this.elementHTML (list element structure) to the actual DOM of the page.
 	this.addNode = function(arrayNum, locationToAdd){
 		if ((!locationToAdd) || (locationToAdd != "start" && locationToAdd != "end")){locationToAdd = "end"}//Set default arguments.
 
 		if (locationToAdd == "start"){		//Determine whether we are adding nodes to beginning
-			$("h1", this.container).after($(this.thisNode(arrayNum)));
+			$('#' + this.containingElementID + ' h1').after(this.elementHTML(arrayNum));
 		} else {
-			$(this.endingLi, this.container).before($(this.thisNode(arrayNum)));
+			$('#' + this.containingElementID + ' li.addnew').before(this.elementHTML(arrayNum));
 		}
-
-		/* myUtils.addedLines is a variable that keeps track of how many
-		user-added lines there are.  We need this in order to give
-		each added line a unique name automatically.  Otherwise
-		we would need a long list of names in an array and it
-		would not be extendable! */
-		myUtils.addedLines++;
 	}
 	
 	
-	// Public for direct use in page, writes the Next In entry.  Basically just a procedure.
+	// Returns the # of milliseconds from now that the link is available again.
 	this.nextIn = function(){	
 		var Today = new Date();
-		if (this.cookieExists()){
-			var ourCookie = this.expiryCookie();
+		if (cookieUtils.exists("neopets" + this.name)){
+			var ourCookie = this.available();
 			var ourExpiry = new Date(ourCookie);
 			return ourExpiry.getTime() - Today.getTime();			
 			
@@ -281,15 +306,13 @@ function linkObject(name, passedNumber, duration, longName, url){
 		}
 	}
 		
+	// Returns the string to display in the page, for when the link is available again.
 	this.nextInString = function(){
-		return myUtils.formatMS(this.nextIn());
+		return chrissiUtils.formatMS(this.nextIn());
 	}
 }
 
-var myUtils = new chrissiUtils();
-
-// Wrapper for linkObject() which takes a JSON object as its argument,
-// and creates a new linkObject() with the JSON object's properties.
+// Wrapper for linkObject() which makes a new linkObject with JSON's properties.
 linkObjectTakingJSON = function(obj){
     for(var o in obj){
         this[o] = obj[o];
@@ -304,42 +327,46 @@ linkObjectTakingJSON.prototype = new linkObject();
 // Then a node is added to the document for each.
 // Using jquery makes this simple to understand!
 var linkObjects = new Array;
+	
+chrissiUtils.createNewEmptyList("defaultList", "Default List");
+
 var myJSON = $.getJSON("files.json", function(data){
+
 	$.each(data, function(index, myObject){
 		spot = myObject.numID;
 		linkObjects[spot] = new linkObjectTakingJSON(myObject);
 	})
 	
-	if (myUtils.hasCookie("sortingmethod")){
-	myUtils.sortListBy(myUtils.getCookie("sortingmethod"));
+	if (cookieUtils.exists("sortingmethod")){
+	chrissiUtils.sortListBy(linkObjects, cookieUtils.getValue("sortingmethod"));
 	}
-	
-	for (x=0;x<linkObjects.length;x++){
-		linkObjects[x].addNode(x);
-		
-	//linkObjects[4].deleteNode(4);
-	}
+	chrissiUtils.loadList("defaultList", linkObjects);
 })
 
+
+chrissiUtils.createNewEmptyList("newList", "My New List");
+
+// More magic!  One click handler, many detection methods!
 $('body').click(function(clickEvent){
-	if ($(clickEvent.target).is('a', 'li', 'ul#linklist')){				// onclick 'a' list item....
+	if ($(clickEvent.target).is($('ul.linklist li a'))){				// onclick 'a' list item....
 		var myA = $(clickEvent.target);
 		var myASpan = $(myA.parent());
 		var myLi = $(myASpan.parent());
 		var myTimerSpan = $(myASpan.next());
-		myUtils.updateTimer("create",myA,myTimerSpan,myLi,linkObjects);
+		//if (cookieUtils.exists(linkObjects[x])){}
+		chrissiUtils.updateTimer("create",myA,myTimerSpan,myLi,linkObjects);
 	}
-	if ($(clickEvent.target).is('a', 'h1', 'ul#linklist')){				// onclick sorting symbol...
+	if ($(clickEvent.target).is($('ul.linklist h1 a'))){				// onclick sorting symbol...
 		var myA = $(clickEvent.target);
 		var myASpan = $(myA.parent());
-		if ($(myASpan).is($(":first-child"))){
-			myUtils.sortListBy("alpha");
+		if ($(myASpan).text() == "Name▼"){
+			chrissiUtils.sortListBy(linkObjects,"alpha");
 		} else {
-			myUtils.sortListBy("time");
+			chrissiUtils.sortListBy(linkObjects,"time");
 		}
-		myUtils.reloadList("linklist", linkObjects);
+		chrissiUtils.reloadList("defaultList", linkObjects);
 	}
-	if ($(clickEvent.target).is("button", 'ul#linklist')){ 				// onclick 'button'...
+	if ($(clickEvent.target).is("button", 'ul.linklist')){ 				// onclick 'button'...
 		var myButton = $(clickEvent.target);
 		var myButtonSpan = $(myButton.parent());
 		var myLi = $(myButtonSpan.parent());
@@ -347,15 +374,15 @@ $('body').click(function(clickEvent){
 		var myASpan = $(myTimerSpan.prev());
 		var myA = $('a', myASpan);
 		if ($(clickEvent.target).text() == "Oops!"){
-			myUtils.updateTimer("delete",myA,myTimerSpan,myLi,linkObjects);
+			chrissiUtils.updateTimer("delete",myA,myTimerSpan,myLi,linkObjects);
 		} else {
-			myUtils.updateTimer("create",myA,myTimerSpan,myLi,linkObjects);
+			chrissiUtils.updateTimer("create",myA,myTimerSpan,myLi,linkObjects);
 		}
 	}
 })
-	
+
+// Updates timers every second.
 setInterval( function () {
-	myUtils.updateAllTimers();
+	chrissiUtils.updateAllTimers();
 	}, 1000
 );
-

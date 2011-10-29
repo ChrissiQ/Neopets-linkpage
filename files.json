@@ -5,7 +5,7 @@
       "duration":1800,
       "longName":"The Healing Springs",
       "url":"http://www.neopets.com/faerieland/springs.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"mediocrity",
@@ -13,7 +13,7 @@
       "duration":2400,
       "longName":"Wheel of Mediocrity",
       "url":"http://www.neopets.com/prehistoric/mediocrity.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"excitement",
@@ -21,7 +21,7 @@
       "duration":7200,
       "longName":"Wheel of Excitement",
       "url":"http://www.neopets.com/faerieland/wheel.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"treasure",
@@ -29,7 +29,7 @@
       "duration":10800,
       "longName":"Buried Treasure",
       "url":"http://www.neopets.com/pirates/buriedtreasure/index.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"strength",
@@ -37,7 +37,7 @@
       "duration":21600,
       "longName":"Test Your Strength",
       "url":"http://www.neopets.com/halloween/strtest/index.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"scratch",
@@ -45,7 +45,7 @@
       "duration":21600,
       "longName":"Scratchcard",
       "url":"http://www.neopets.com/winter/kiosk.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"fishing",
@@ -53,7 +53,7 @@
       "duration":43200,
       "longName":"Underwater Fishing",
       "url":"http://www.neopets.com/water/fishing.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"coltzan",
@@ -61,7 +61,7 @@
       "duration":43200,
       "longName":"Coltzan's Shrine",
       "url":"http://www.neopets.com/desert/shrine.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"snowager",
@@ -69,7 +69,7 @@
       "duration":"snowager",
       "longName":"Snowager",
       "url":"http://www.neopets.com/winter/snowager.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"potato",
@@ -77,7 +77,7 @@
       "duration":"daily",
       "longName":"Potato Counter",
       "url":"http://www.neopets.com/medieval/potatocounter.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"meteor",
@@ -85,7 +85,7 @@
       "duration":"daily",
       "longName":"Meteor Crash Site",
       "url":"http://www.neopets.com/moon/meteor.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"omelette",
@@ -93,7 +93,7 @@
       "duration":"daily",
       "longName":"Giant Omelette",
       "url":"http://www.neopets.com/prehistoric/omelette.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"symol",
@@ -101,7 +101,7 @@
       "duration":"daily",
       "longName":"Symol Hole",
       "url":"http://www.neopets.com/medieval/symolhole.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"tombola",
@@ -109,7 +109,7 @@
       "duration":"daily",
       "longName":"Tombola",
       "url":"http://www.neopets.com/island/tombola.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"tomb1",
@@ -117,7 +117,7 @@
       "duration":"daily",
       "longName":"Deserted Tomb",
       "url":"http://www.neopets.com/worlds/geraptiku/tomb.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"fruit",
@@ -125,7 +125,7 @@
       "duration":"daily",
       "longName":"Fruit Machine",
       "url":"http://www.neopets.com/desert/fruitmachine.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"jelly",
@@ -133,7 +133,7 @@
       "duration":"daily",
       "longName":"Giant Jelly",
       "url":"http://www.neopets.com/jelly/jelly.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"lab",
@@ -141,7 +141,7 @@
       "duration":"daily",
       "longName":"Lab Ray",
       "url":"http://www.neopets.com/lab.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"bank",
@@ -149,7 +149,7 @@
       "duration":"daily",
       "longName":"Bank (Interest)",
       "url":"http://www.neopets.com/bank.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"faerie1",
@@ -157,7 +157,7 @@
       "duration":43200,
       "longName":"Illusen's Quest",
       "url":"http://www.neopets.com/medieval/earthfaerie.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"faerie2",
@@ -165,7 +165,7 @@
       "duration":43200,
       "longName":"Jhudora's Quest",
       "url":"http://www.neopets.com/faerieland/darkfaerie.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"stock",
@@ -173,7 +173,7 @@
       "duration":"daily",
       "longName":"Stock Market (bargain stocks)",
       "url":"http://www.neopets.com/stockmarket.phtml?type=list&bargain=true",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"advent",
@@ -181,7 +181,7 @@
       "duration":"decemberdaily",
       "longName":"Advent Calendar (December only)",
       "url":"http://www.neopets.com/winter/adventcalendar.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"coconut",
@@ -189,7 +189,7 @@
       "duration":"daily",
       "longName":"Coconut Shy",
       "url":"http://www.neopets.com/halloween/coconutshy.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"altador",
@@ -197,7 +197,7 @@
       "duration":"daily",
       "longName":"Altador Prize",
       "url":"http://www.neopets.com/altador/council.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"slorg",
@@ -205,7 +205,7 @@
       "duration":"daily",
       "longName":"Shop of Offers",
       "url":"http://www.neopets.com/shop_of_offers.phtml?slorg_payout=yes",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"marrow",
@@ -213,7 +213,7 @@
       "duration":"daily",
       "longName":"Guess the weight of the marrow",
       "url":"http://www.neopets.com/medieval/guessmarrow.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"lunar",
@@ -221,7 +221,7 @@
       "duration":"daily",
       "longName":"Lunar Temple",
       "url":"http://www.neopets.com/shenkuu/lunar/",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"faerie3",
@@ -229,7 +229,7 @@
       "duration":"daily",
       "longName":"Faerie Crossword",
       "url":"http://www.neopets.com/games/crossword/index.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"knowledge",
@@ -237,7 +237,7 @@
       "duration":"daily",
       "longName":"Wheel of Knowledge",
       "url":"http://www.neopets.com/medieval/knowledge.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"monthlyfreebie",
@@ -245,7 +245,7 @@
       "duration":"monthly",
       "longName":"Monthly Freebie",
       "url":"http://www.neopets.com/freebies/index.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
       "name":"forgottenshore",
@@ -253,7 +253,7 @@
       "duration":"daily",
       "longName":"Forgotten Shore",
       "url":"http://www.neopets.com/pirates/forgottenshore.phtml",
-      "containingElementID":"linklist"
+      "containingElementID":"defaultList"
    },
    {
 	  "name":"obsidianquarry",
@@ -261,7 +261,7 @@
 	  "duration":"daily",
 	  "longName":"Obsidian Quarry",
 	  "url":"http://www.neopets.com/magma/quarry.phtml",
-	  "containingElementID":"linklist"
+	  "containingElementID":"defaultList"
 	},
 	{
 	  "name":"employment",
@@ -269,6 +269,6 @@
 	  "duration":"daily",
 	  "longName":"Faerieland Employment Agency",
 	  "url":"http://www.neopets.com/faerieland/employ/employment.phtml",
-	  "containingElementID":"linklist"
+	  "containingElementID":"defaultList"
 	}
 ]
