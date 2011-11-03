@@ -1,0 +1,65 @@
+body{
+	font-family: sans-serif;
+}
+
+/* Style inputs. */
+
+	div.form input.numbers{
+		width: 2em;
+	}
+	div.form input{
+		border: 1px solid #888888;
+		padding: 3px;
+		border-radius: 3px;
+		box-shadow: 0 0 1px gray, -2px -5px 20px #DDDDDD inset;
+	}
+	div.form input:active, div.form input:focus, .focused{	
+		box-shadow: 0 0 3px #0000FF, -2px -5px 20px #AAAAFF inset;
+	}
+
+	div.form input.radio{
+		border-radius: 50%;
+		color: gray;
+		background-color: #DFDFDF;
+	}
+	
+	button{
+		border-radius: 8px;
+		border: 1px solid #888888;		
+		box-shadow: 0 0 3px #AAAAAA, 0 -1px 8px #CCCCCC inset;
+		background-color: white;
+		color: #444444;
+		padding: 1px 3px;
+		margin: 3px;
+	}
+	
+/* Containing form. */
+
+	li.newlinkform{
+		float: left;
+		border: 1px solid gray;
+	}
+
+/* Title */
+	div.form div.legend{
+		text-align: center;
+	}
+
+/* Spacing between divs*/
+	div.form div{
+		padding: 4px;
+	}
+/* Labels align at left. */
+	div.form div span.label{
+		float: left;
+		width: 8em;
+	}
+	
+span.options{
+	float: left;
+}
+span.options div{
+}
+.clearfix{
+	 height: 0;
+	 clear: both;

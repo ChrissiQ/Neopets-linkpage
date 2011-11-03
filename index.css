@@ -13,6 +13,15 @@ em{
 	font-style: normal;
 	
 }
+button{
+	border-radius: 8px;
+	border: 1px solid #888888;		
+	box-shadow: 0 0 3px #AAAAAA, 0 -1px 8px #CCCCCC inset;
+	background-color: white;
+	color: #444444;
+	padding: 1px 3px;
+	margin: 3px;
+}
 
 /* Main page columns. */
 .column{
@@ -81,27 +90,27 @@ ul.linklist li button{
 /* Link colours.  */
 
 
-ul.linklist li a:link, 
-ul.linklist li a:visited,
-ul.linklist li a:active{
+ul.linklist li span.link a:link, 
+ul.linklist li span.link a:visited,
+ul.linklist li span.link a:active{
 	color: #19962d;
 	text-decoration: none;
 	font-weight: bold;
 }
-ul.linklist li a:hover, 
-ul.linklist li a:visited:hover,
-ul.linklist li a:active:hover{
+ul.linklist li span.link a:hover, 
+ul.linklist li span.link a:visited:hover,
+ul.linklist li span.link a:active:hover{
 	color: #19962d;
 }
 
 /* Interactive elements for javascript use */
 
-ul.linklist li a:link.unavailable, 
-ul.linklist li a:hover.unavailable, 
-ul.linklist l ia:active.unavailable,
-ul.linklist li a:visited.unavailable, 
-ul.linklist li a:visited:hover.unavailable,
-ul.linklist li a:active:hover.unavailable{
+ul.linklist li.unavailable span.link a:link, 
+ul.linklist li.unavailable span.link a:hover, 
+ul.linklist li.unavailable span.link a:active,
+ul.linklist li.unavailable span.link a:visited, 
+ul.linklist li.unavailable span.link a:visited:hover,
+ul.linklist li.unavailable span.link a:active:hover{
 	color: red;
 	text-decoration: none;
 	font-weight: normal;
@@ -128,10 +137,13 @@ ul.linklist h1 a:active:hover{
 	position: relative;
 }
 
-.remove,
-.add{
-	float: left;
-	text-align: center;
-	width: 20px;
-	border: 1px dotted black;
+div.column ul.linklist li span.remove button,
+div.column ul.linklist li span.add button{	
+
+	border-radius: 50%;
+	height: 23px;
+	width: 23px;
+	margin: 0 0;
+	padding: 3px;
+	font-weight: bold;
 }
