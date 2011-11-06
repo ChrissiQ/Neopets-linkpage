@@ -44,6 +44,17 @@ ul.linklist{
 	border: 1px solid gray;
 }
 
+/* List title */
+span.listtitle{
+	overflow: hidden;
+	padding: 2px;
+	width: 100%;
+	float: left;
+}
+span.listtitle input{
+	font: inherit;
+}
+
 /* List formatting (as cells) */
 ul.linklist li span, 
 ul.linklist h1 span{

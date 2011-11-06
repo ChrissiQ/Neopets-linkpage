@@ -1,5 +1,5 @@
-﻿var chrissiUtils = new function(){		//	A set of utilities that I am using, inside an object to limit the scope, just for safety.
-	this.neopetsGMTOffset = 7;	// Constant, may change based on Daylight Savings, this is neopets time offset from GMT.	
+﻿var chrissiUtils = new function(){	//	Scoped utilities.
+	this.neopetsGMTOffset = 7;      // Constant, may change based on Daylight Savings, this is neopets time offset from GMT.	
 	this.Today = function(){
 		return new Date();
 	}
@@ -7,7 +7,7 @@
 		var nextY = new Date();
 		nextY.setFullYear(this.Today().getFullYear()+1);
 		return nextY;
-	}		
+	}
 	this.formatMS = function(sc){	// Formats a number of seconds as hr:mn:sc, for display purposes.
 		var mn = 0
 		var hr = 0
@@ -24,68 +24,33 @@
 		if (hr < 10){hr = "0" + hr}
 		return hr + ":" + mn + ":" + sc
 	}
-	// Update a timer when information changes.
-	this.updateTimer = function(createOrDelete, timerElement, liElement, list){	
-	for (var m = 0; m<list.length; m++){
-		if ($(liElement).is("#neopets" + list[m].name)){
-			if (createOrDelete === "delete"){
-				list[m].deleteCookie();
-				if (list[m].nextIn() <= 0){
-				liElement.removeClass("unavailable");
-				}
-			}else{
-				list[m].addCookie();
-				liElement.addClass("unavailable");
-			}
-			timerElement.text(list[m].nextInString());
-	}}}
-	
-	// Get the current status of all timers.
-	// Used to update the page every second.
-	// ALL LISTS MUST BE IN THE MAIN LIST ARRAY!
-	this.updateAllTimers = function(){
-		var parent;
-		var listItem;
-		var listItemNum
-		var itemSpan;
-		var updateLink;
-		var endOfLists;
-		var listLength = lists.length;
-		if (lists[listLength-1].linkObjects == null){		// If the last list has an empty array of links,
-			endOfLists = listLength-2;					// Don't bother updating its timer.
-		} else {
-			endOfLists = listLength-1;
-		}
-		for (var listNum=0; listNum<endOfLists; listNum++){
-			 parent = $('ul.linklist')[listNum];
-			 listItem = $('li', parent);
-			for (var obj = 0; obj < lists[listNum].linkObjects.length; obj++){
-				listItemNum = $(listItem)[obj];
-				itemSpan = $('span', listItemNum);
-				updateLink = $('a', itemSpan);
-				$(itemSpan[2]).text(lists[listNum].linkObjects[obj].nextInString());
-			}
-		}
-	}
-	
-	
-	this.newListObjectFromArray = function(longName, listArray){
-		return new listObject(listArray[0].listName, longName, listArray);
-	}
-	
+    this.updateAllTimers = function(){
+        for (i=0;i<lists.length;i++){
+            for (j=0;j<lists[i].linkObjects.length;j++){             
+                lists[i].linkObjects[j].updateTimer();
+            }
+        }
+    }
 	this.parseClick = function(Target){
 		if ($(Target).parents('ul').length){
+            
 			var sortLabel;
 			var liElement = $(Target).parents('li');
 			var parentListID = $($(Target).parents('ul.linklist')).attr('id');
-			var targetList = eval(parentListID);
-			var listLinkObjects = targetList.linkObjects;
+            var listNum
+            for (j=0;j<lists.length;j++){
+                if (parentListID == lists[j].name){
+                    listNum = j;
+                }
+            }
+            var targetList = lists[listNum];
+			var listLinkObjects = lists[listNum].linkObjects;
 			var linkObjectsLength = listLinkObjects.length;
 			
 			if (Target.is($('ul.linklist span.link a'))){				// onclick 'a' list item....
-				for (var l=0; l<linkObjectsLength; l++){			
-					if ("neopets" + listLinkObjects[l].name == liElement.attr('id')){
-						listLinkObjects[l].buttonAction("create");
+				for (var i=0; i<listLinkObjects[linkObjectsLength]; i++){			
+					if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
+						lists[listNum].linkObjects[i].buttonAction("create");
 			}}}
 			if (Target.is($('ul.linklist h1 a'))){				// onclick sorting symbol...
 				sortLabel = $(Target.parent());
@@ -98,19 +63,26 @@
 			}
 			if (Target.is('ul.linklist button')){ 				// onclick 'button'...
 				if (Target.text() == "Oops!"){
-					for (var l=0; l<linkObjectsLength; l++){			
-						if ("neopets" + listLinkObjects[l].name == liElement.attr('id')){
-							listLinkObjects[l].buttonAction("delete");
+					for (i=0; i<linkObjectsLength; i++){			
+						if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
+							listLinkObjects[i].buttonAction("delete");
 						}
 					}
 				} else if (Target.text() == "Done!") {
-					for (var l=0; l<linkObjectsLength; l++){				
-						if ("neopets" + listLinkObjects[l].name == liElement.attr('id')){			
-							listLinkObjects[l].buttonAction("create");
+					for (i=0; i<linkObjectsLength; i++){				
+						if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){			
+							listLinkObjects[i].buttonAction("create");
 				}}}
 			}
-		}
-	}
+            if (Target.is('ul.linklist span.listtitle')){
+                $(Target).empty();
+                input = $("<input type='text'></input>");
+                $(input).val(lists[listNum].longName);
+                $(Target).append(input);
+            }
+            
+		}//if ($(Target).parents('ul').length){
+	}//parseClick
 }
 
 function listObject(name, longName, linkObjects){
@@ -118,6 +90,7 @@ function listObject(name, longName, linkObjects){
 	this.name = name;
 	this.longName = longName
 	this.linkObjects = linkObjects;
+    this.listNum;
 	
 	this.toJSON = function(){
 		return {
@@ -126,8 +99,20 @@ function listObject(name, longName, linkObjects){
 			linkObjects: this.linkObjects
 		}
 	}
+    this.makeArrayObjects = function(){ 
+        for (j=0;j<this.linkObjects.length;j++){
+            this.linkObjects[j] = new linkObject(
+                this.linkObjects[j].name,
+                this.linkObjects[j].numID,
+                this.linkObjects[j].duration,
+                this.linkObjects[j].longName,
+                this.linkObjects[j].url,
+                this.linkObjects[j].listName
+            );
+        }           
+    }
 	this.sorted = function(){
-		if ($.cookie(this.name + "sortingmethod") !== null){
+		if ($.cookie("list" + this.listNum + "sortingmethod") !== null){
 			return true;
 		} else {
 			return false;
@@ -136,7 +121,7 @@ function listObject(name, longName, linkObjects){
 	this.addSortCookie = function(sortType){
 		var thisSortType = sortType;
 		$.cookie(
-			this.name + "sortingmethod",
+			"list" + this.listNum + "sortingmethod",
 			sortType, 
 			{ expires: 
 				Math.floor((
@@ -161,11 +146,7 @@ function listObject(name, longName, linkObjects){
 			})	
 		}	
 		this.addSortCookie(tag);
-	}	
-	this.getSortCookie = function(){
-		return $.cookie(this.name + "sortingmethod");
 	}
-		
 	// Clear out a list of all items.
 	this.clear = function (){
 		var list = $("ul#" + this.name);
@@ -175,15 +156,17 @@ function listObject(name, longName, linkObjects){
 	this.blankList = function(){	
 		return $(
 		"<div class='column'>" +
-			"<span>" + this.longName + "</span>" +
 			"<ul class='linklist' id='" + this.name + "'>" +
+			"<span class='listtitle'>" + this.longName + "</span>" +
 				"<h1 class='permanent'>" + 
 					"<span class='remove'><a href='#'>-</a></span>" +
 					"<span class='link'>Name<a href='#'>▼</a></span>" +
 					"<span>Next in<a href='#'>▼</a></span>" +
 					"<span>Mark Done</span>" +
 				"</h1>" +
-				"<li class='addnew permanent'><span class='add'><a href='#'>+</a></span></li>"+
+				"<li class='addnew permanent'>" +
+                    "<span class='add'><a href='#'>+</a></span>" +
+                "</li>"+
 				"<li class='endingSpacer permanent'></li>" +
 			"</ul>" +
 		"</div>");
@@ -198,9 +181,9 @@ function listObject(name, longName, linkObjects){
 	// Load list items from the array into the DOM.
 	this.load = function (){
 		for (y=0;y<this.linkObjects.length;y++){
-			this.linkObjects[y].addNode();
+			this.linkObjects[y].addNode("end",this.listNum);
 		}
-		$("ul#" + this.name + " li:odd").addClass("odd");
+		$($("ul.linklist")[this.listNum]).find("li:odd").addClass("odd");
 	}
 	
 	// Clear DOM list, then reload it with new information.
@@ -223,18 +206,8 @@ function listObject(name, longName, linkObjects){
 	
 	this.printNewListForm = function(){
 		
-		$('ul#' + this.name + ' li.addnew').before(
-			"<li class='newlinkform'><form><legend>Add a link</legend>" + 
-			"<label>Link Name</label><input type='text' />" +
-			"<label>Address (URL)</label><input type='text' />" +
-			"<label>Frequency</label><input type='radio' name='frequency' />Hourly" +
-			"" +
-			"</form></li>"
-		);
-		
 	}
-
-}
+};
 function linkObject(name, passedNumber, duration, longName, url, listName){
 	// The main object representing an individual link on the page.
 	// There are no defaults since we are creating unique objects.
@@ -245,8 +218,7 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 	this.longName = longName;
 	this.url = url;
 	this.listName = listName; // The default list.
-	this.container = $("ul#" + this.listName);	// The container element in the DOM.
-	
+	this.container = $("ul#" + this.listName);	// The container element in the DOM.	
 	this.toJSON = function(){
 		return {
 			name: this.name,
@@ -257,7 +229,6 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 			listName: this.listName
 		}
 	}
-	
 	// Returns an expiry date based on the current time + dur seconds.
 	this.availableDate = function(dur){		
 		if (!dur){dur = this.duration;}		// Or if the duration is not a time but a fixed date,
@@ -376,13 +347,19 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 	}
 	
 	//Add this.elementHTML (list element structure) to the actual DOM of the page.
-	this.addNode = function(locationToAdd){
-		if ((!locationToAdd) || (locationToAdd != "start" && locationToAdd != "end")){locationToAdd = "end"}//Set default arguments.
-
-		if (locationToAdd == "start"){		//Determine whether we are adding nodes to beginning
-			$('ul#' + this.listName + ' h1').after(this.elementHTML());
+	this.addNode = function(locationToAdd, listNum){
+        var Target;
+		if (
+            (!locationToAdd) ||
+            (locationToAdd != "start" && locationToAdd != "end")){
+        locationToAdd = "end"
+        }//Set default arguments.
+		if (locationToAdd == "start"){	//Determine whether we are adding nodes to beginning
+			Target = $($('ul.linklist')[listNum]).find('h1');
+            Target.after(this.elementHTML());
 		} else {
-			$('ul#' + this.listName + ' li.addnew').before(this.elementHTML());
+			Target = $($('ul.linklist')[listNum]).find('li.addnew');
+            Target.before(this.elementHTML());
 		}
 		this.listItem = $('li#neopets' + this.name);
 		this.linkItem = $(this.listItem).find('a');
@@ -422,18 +399,15 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 	this.nextInString = function(){
 		return chrissiUtils.formatMS(this.nextIn());
 	}
-
 	this.makeAvailable = function(){
 		this.listItem.removeClass('unavailable');
 	}
 	this.makeUnavailable = function(){
 		this.listItem.addClass('unavailable');
-	}
-	
+	}	
 	this.updateTimer = function(){
 		$(this.timerElement).text(this.nextInString());
-	}
-	
+	}	
 	this.buttonAction = function(createOrDelete){
 		if (createOrDelete === "delete"){
 			this.deleteCookie();
@@ -446,101 +420,46 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 		}
 		this.updateTimer();			
 	}
-}
+}		
 
-// Wrapper for linkObject() which makes a new linkObject with JSON's properties.
-linkObjectTakingJSON = function(obj){
-    for(var o in obj){
-        this[o] = obj[o];
-    }
-};					
-linkObjectTakingJSON.prototype = new linkObject();
-
-// Where the magic happens!
-// lists[0] is the array of link objects.  It is pulled
-// from "files.json" as an array of objects.  These objects are
-// then converted to a linkObject with all methods.
-// Then a node is added to the document for each.
-// Using jquery makes this simple to understand!
 var lists = [];
-var list0 = [];
-var otherlinks = [];
-var list2 = [];
-
 $.getJSON("files.json", function(data){
-
-	$.each(data, function(index, myObject){
-		spot = myObject.numID;
-		list0[spot] = new linkObjectTakingJSON(myObject);
-	});	
-	list0 = chrissiUtils.newListObjectFromArray("My Default List", list0);
-	lists[0] = list0;
-	
-	if (lists[0].sorted){
-		lists[0].sortBy(lists[0].getSortCookie());
-	}
-	lists[0].initialize();
-	lists[0].load();
-
-	otherlinks = [
-		new linkObjectTakingJSON({
-		  "name":"imaginar",
-		  "numID":0,
-		  "duration":10800,
-		  "longName":"Imaginary Something 1",
-		  "url":"http://www.neopets.com/pirates/buriedtreasure/index.phtml",
-		  "listName":"otherlinks"
-	   }),
-	   new linkObjectTakingJSON({
-		  "name":"imaginaryso",
-		  "numID":1,
-		  "duration":21600,
-		  "longName":"Imaginary Something 2",
-		  "url":"http://www.neopets.com/halloween/strtest/index.phtml",
-		  "listName":"otherlinks"
-	   }),
-	   new linkObjectTakingJSON({
-		  "name":"crazyonetwo",
-		  "numID":2,
-		  "duration":21600,
-		  "longName":"The Crazy One",
-		  "url":"http://www.neopets.com/winter/kiosk.phtml",
-		  "listName":"otherlinks"
-	   })
-	];
-	otherlinks = chrissiUtils.newListObjectFromArray("New List", otherlinks);
-	otherlinks.initialize();
-	if (otherlinks.sorted()){
-		otherlinks.sortBy(otherlinks.getSortCookie());
-	}
-	otherlinks.load();
-	lists[1] = otherlinks;
-
-	//console.log(chrissiUtils.JSONObjectCookie(list0.linkObjects[0].name));
-	console.log(JSON.stringify(lists[0]));
-	var JSONString = JSON.stringify(otherlinks.linkObjects);
-	$.cookie("list2", JSONString, { expires: 60*60*24*365 } );
-
-	$.each(
-		JSON.parse($.cookie("list2")),
-		function(index,Element){
-			list2[index] = new linkObjectTakingJSON(Element);
-			list2[index].listName = "list2";
-			list2[index].name = list2[index].name + "2";
-		});
-
-	list2 = chrissiUtils.newListObjectFromArray("Other Custom List", list2);
-	lists[2] = list2;
-	list2.initialize();
-	if (list2.sorted()){
-			list2.sortBy(list2.getSortCookie());
-		}
-	list2.load();
-	
-	lists[lists.length] = new listObject("list" + lists.length, "Create New List", null);
-	lists[lists.length-1].initialize();
+	lists[0] = data;
+    lists[0] = new listObject(
+        lists[0].name,
+        lists[0].longName,
+        lists[0].linkObjects
+    );
+    lists[0].listNum = lists.length-1;
+    lists[0].makeArrayObjects();
+    lists[0].initialize();
+    if (lists[0].sorted){
+        lists[0].sortBy($.cookie("list0sortingmethod"))
+    }
+    lists[0].load();
+    
+    lists[1] = new listObject(
+        "newlist",
+        "My New List",
+        JSON.parse($.cookie("list2"))
+    );
+    lists[1].listNum = lists.length-1;
+    lists[1].makeArrayObjects();
+    lists[1].initialize();
+    if (lists[1].sorted){
+        lists[1].sortBy($.cookie("list1sortingmethod"))
+    }
+    lists[1].load();
+    
+    lists[lists.length] = new listObject(
+        "magiclist",
+        "Magic List",
+        []
+    );
+    lists[lists.length-1].listNum = lists.length-1;
+    lists[lists.length-1].initialize();
 });
-// More magic!  One click handler, many detection methods!
+
 $('body').click(function(clickEvent){
 	chrissiUtils.parseClick($(clickEvent.target));
 });

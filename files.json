@@ -1,274 +1,278 @@
-[
-   {
-      "name":"healing",
-      "numID":0,
-      "duration":1800,
-      "longName":"The Healing Springs",
-      "url":"http://www.neopets.com/faerieland/springs.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"mediocrity",
-      "numID":1,
-      "duration":2400,
-      "longName":"Wheel of Mediocrity",
-      "url":"http://www.neopets.com/prehistoric/mediocrity.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"excitement",
-      "numID":2,
-      "duration":7200,
-      "longName":"Wheel of Excitement",
-      "url":"http://www.neopets.com/faerieland/wheel.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"treasure",
-      "numID":3,
-      "duration":10800,
-      "longName":"Buried Treasure",
-      "url":"http://www.neopets.com/pirates/buriedtreasure/index.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"strength",
-      "numID":4,
-      "duration":21600,
-      "longName":"Test Your Strength",
-      "url":"http://www.neopets.com/halloween/strtest/index.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"scratch",
-      "numID":5,
-      "duration":21600,
-      "longName":"Scratchcard",
-      "url":"http://www.neopets.com/winter/kiosk.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"fishing",
-      "numID":6,
-      "duration":43200,
-      "longName":"Underwater Fishing",
-      "url":"http://www.neopets.com/water/fishing.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"coltzan",
-      "numID":7,
-      "duration":43200,
-      "longName":"Coltzan's Shrine",
-      "url":"http://www.neopets.com/desert/shrine.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"snowager",
-      "numID":8,
-      "duration":"snowager",
-      "longName":"Snowager",
-      "url":"http://www.neopets.com/winter/snowager.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"potato",
-      "numID":9,
-      "duration":"daily",
-      "longName":"Potato Counter",
-      "url":"http://www.neopets.com/medieval/potatocounter.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"meteor",
-      "numID":10,
-      "duration":"daily",
-      "longName":"Meteor Crash Site",
-      "url":"http://www.neopets.com/moon/meteor.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"omelette",
-      "numID":11,
-      "duration":"daily",
-      "longName":"Giant Omelette",
-      "url":"http://www.neopets.com/prehistoric/omelette.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"symol",
-      "numID":12,
-      "duration":"daily",
-      "longName":"Symol Hole",
-      "url":"http://www.neopets.com/medieval/symolhole.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"tombola",
-      "numID":13,
-      "duration":"daily",
-      "longName":"Tombola",
-      "url":"http://www.neopets.com/island/tombola.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"tomb1",
-      "numID":14,
-      "duration":"daily",
-      "longName":"Deserted Tomb",
-      "url":"http://www.neopets.com/worlds/geraptiku/tomb.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"fruit",
-      "numID":15,
-      "duration":"daily",
-      "longName":"Fruit Machine",
-      "url":"http://www.neopets.com/desert/fruitmachine.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"jelly",
-      "numID":16,
-      "duration":"daily",
-      "longName":"Giant Jelly",
-      "url":"http://www.neopets.com/jelly/jelly.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"lab",
-      "numID":17,
-      "duration":"daily",
-      "longName":"Lab Ray",
-      "url":"http://www.neopets.com/lab.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"bank",
-      "numID":18,
-      "duration":"daily",
-      "longName":"Bank (Interest)",
-      "url":"http://www.neopets.com/bank.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"faerie1",
-      "numID":19,
-      "duration":43200,
-      "longName":"Illusen's Quest",
-      "url":"http://www.neopets.com/medieval/earthfaerie.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"faerie2",
-      "numID":20,
-      "duration":43200,
-      "longName":"Jhudora's Quest",
-      "url":"http://www.neopets.com/faerieland/darkfaerie.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"stock",
-      "numID":21,
-      "duration":"daily",
-      "longName":"Stock Market (bargain stocks)",
-      "url":"http://www.neopets.com/stockmarket.phtml?type=list&bargain=true",
-      "listName":"list0"
-   },
-   {
-      "name":"advent",
-      "numID":22,
-      "duration":"decemberdaily",
-      "longName":"Advent Calendar (December only)",
-      "url":"http://www.neopets.com/winter/adventcalendar.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"coconut",
-      "numID":23,
-      "duration":"daily",
-      "longName":"Coconut Shy",
-      "url":"http://www.neopets.com/halloween/coconutshy.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"altador",
-      "numID":24,
-      "duration":"daily",
-      "longName":"Altador Prize",
-      "url":"http://www.neopets.com/altador/council.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"slorg",
-      "numID":25,
-      "duration":"daily",
-      "longName":"Shop of Offers",
-      "url":"http://www.neopets.com/shop_of_offers.phtml?slorg_payout=yes",
-      "listName":"list0"
-   },
-   {
-      "name":"marrow",
-      "numID":26,
-      "duration":"daily",
-      "longName":"Guess the weight of the marrow",
-      "url":"http://www.neopets.com/medieval/guessmarrow.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"lunar",
-      "numID":27,
-      "duration":"daily",
-      "longName":"Lunar Temple",
-      "url":"http://www.neopets.com/shenkuu/lunar/",
-      "listName":"list0"
-   },
-   {
-      "name":"faerie3",
-      "numID":28,
-      "duration":"daily",
-      "longName":"Faerie Crossword",
-      "url":"http://www.neopets.com/games/crossword/index.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"knowledge",
-      "numID":29,
-      "duration":"daily",
-      "longName":"Wheel of Knowledge",
-      "url":"http://www.neopets.com/medieval/knowledge.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"monthlyfreebie",
-      "numID":33,
-      "duration":"monthly",
-      "longName":"Monthly Freebie",
-      "url":"http://www.neopets.com/freebies/index.phtml",
-      "listName":"list0"
-   },
-   {
-      "name":"forgottenshore",
-      "numID":31,
-      "duration":"daily",
-      "longName":"Forgotten Shore",
-      "url":"http://www.neopets.com/pirates/forgottenshore.phtml",
-      "listName":"list0"
-   },
-   {
-	  "name":"obsidianquarry",
-	  "numID":32,
-	  "duration":"daily",
-	  "longName":"Obsidian Quarry",
-	  "url":"http://www.neopets.com/magma/quarry.phtml",
-	  "listName":"list0"
-	},
-	{
-	  "name":"employment",
-	  "numID":30,
-	  "duration":"daily",
-	  "longName":"Faerieland Employment Agency",
-	  "url":"http://www.neopets.com/faerieland/employ/employment.phtml",
-	  "listName":"list0"
-	}
-]
+{
+   "name":"list0",
+   "longName":"My Default List",
+   "linkObjects":[
+      {
+         "name":"healing",
+         "numID":0,
+         "duration":1800,
+         "longName":"The Healing Springs",
+         "url":"http://www.neopets.com/faerieland/springs.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"mediocrity",
+         "numID":1,
+         "duration":2400,
+         "longName":"Wheel of Mediocrity",
+         "url":"http://www.neopets.com/prehistoric/mediocrity.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"excitement",
+         "numID":2,
+         "duration":7200,
+         "longName":"Wheel of Excitement",
+         "url":"http://www.neopets.com/faerieland/wheel.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"treasure",
+         "numID":3,
+         "duration":10800,
+         "longName":"Buried Treasure",
+         "url":"http://www.neopets.com/pirates/buriedtreasure/index.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"strength",
+         "numID":4,
+         "duration":21600,
+         "longName":"Test Your Strength",
+         "url":"http://www.neopets.com/halloween/strtest/index.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"scratch",
+         "numID":5,
+         "duration":21600,
+         "longName":"Scratchcard",
+         "url":"http://www.neopets.com/winter/kiosk.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"fishing",
+         "numID":6,
+         "duration":43200,
+         "longName":"Underwater Fishing",
+         "url":"http://www.neopets.com/water/fishing.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"coltzan",
+         "numID":7,
+         "duration":43200,
+         "longName":"Coltzan's Shrine",
+         "url":"http://www.neopets.com/desert/shrine.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"snowager",
+         "numID":8,
+         "duration":"snowager",
+         "longName":"Snowager",
+         "url":"http://www.neopets.com/winter/snowager.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"potato",
+         "numID":9,
+         "duration":"daily",
+         "longName":"Potato Counter",
+         "url":"http://www.neopets.com/medieval/potatocounter.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"meteor",
+         "numID":10,
+         "duration":"daily",
+         "longName":"Meteor Crash Site",
+         "url":"http://www.neopets.com/moon/meteor.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"omelette",
+         "numID":11,
+         "duration":"daily",
+         "longName":"Giant Omelette",
+         "url":"http://www.neopets.com/prehistoric/omelette.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"symol",
+         "numID":12,
+         "duration":"daily",
+         "longName":"Symol Hole",
+         "url":"http://www.neopets.com/medieval/symolhole.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"tombola",
+         "numID":13,
+         "duration":"daily",
+         "longName":"Tombola",
+         "url":"http://www.neopets.com/island/tombola.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"tomb1",
+         "numID":14,
+         "duration":"daily",
+         "longName":"Deserted Tomb",
+         "url":"http://www.neopets.com/worlds/geraptiku/tomb.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"fruit",
+         "numID":15,
+         "duration":"daily",
+         "longName":"Fruit Machine",
+         "url":"http://www.neopets.com/desert/fruitmachine.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"jelly",
+         "numID":16,
+         "duration":"daily",
+         "longName":"Giant Jelly",
+         "url":"http://www.neopets.com/jelly/jelly.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"lab",
+         "numID":17,
+         "duration":"daily",
+         "longName":"Lab Ray",
+         "url":"http://www.neopets.com/lab.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"slorg",
+         "numID":25,
+         "duration":"daily",
+         "longName":"Shop of Offers",
+         "url":"http://www.neopets.com/shop_of_offers.phtml?slorg_payout=yes",
+         "listName":"list0"
+      },
+      {
+         "name":"bank",
+         "numID":18,
+         "duration":"daily",
+         "longName":"Bank (Interest)",
+         "url":"http://www.neopets.com/bank.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"marrow",
+         "numID":26,
+         "duration":"daily",
+         "longName":"Guess the weight of the marrow",
+         "url":"http://www.neopets.com/medieval/guessmarrow.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"faerie1",
+         "numID":19,
+         "duration":43200,
+         "longName":"Illusen's Quest",
+         "url":"http://www.neopets.com/medieval/earthfaerie.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"lunar",
+         "numID":27,
+         "duration":"daily",
+         "longName":"Lunar Temple",
+         "url":"http://www.neopets.com/shenkuu/lunar/",
+         "listName":"list0"
+      },
+      {
+         "name":"faerie2",
+         "numID":20,
+         "duration":43200,
+         "longName":"Jhudora's Quest",
+         "url":"http://www.neopets.com/faerieland/darkfaerie.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"faerie3",
+         "numID":28,
+         "duration":"daily",
+         "longName":"Faerie Crossword",
+         "url":"http://www.neopets.com/games/crossword/index.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"stock",
+         "numID":21,
+         "duration":"daily",
+         "longName":"Stock Market (bargain stocks)",
+         "url":"http://www.neopets.com/stockmarket.phtml?type=list&bargain=true",
+         "listName":"list0"
+      },
+      {
+         "name":"knowledge",
+         "numID":29,
+         "duration":"daily",
+         "longName":"Wheel of Knowledge",
+         "url":"http://www.neopets.com/medieval/knowledge.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"coconut",
+         "numID":23,
+         "duration":"daily",
+         "longName":"Coconut Shy",
+         "url":"http://www.neopets.com/halloween/coconutshy.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"employment",
+         "numID":30,
+         "duration":"daily",
+         "longName":"Faerieland Employment Agency",
+         "url":"http://www.neopets.com/faerieland/employ/employment.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"altador",
+         "numID":24,
+         "duration":"daily",
+         "longName":"Altador Prize",
+         "url":"http://www.neopets.com/altador/council.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"forgottenshore",
+         "numID":31,
+         "duration":"daily",
+         "longName":"Forgotten Shore",
+         "url":"http://www.neopets.com/pirates/forgottenshore.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"obsidianquarry",
+         "numID":32,
+         "duration":"daily",
+         "longName":"Obsidian Quarry",
+         "url":"http://www.neopets.com/magma/quarry.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"monthlyfreebie",
+         "numID":33,
+         "duration":"monthly",
+         "longName":"Monthly Freebie",
+         "url":"http://www.neopets.com/freebies/index.phtml",
+         "listName":"list0"
+      },
+      {
+         "name":"advent",
+         "numID":22,
+         "duration":"decemberdaily",
+         "longName":"Advent Calendar (December only)",
+         "url":"http://www.neopets.com/winter/adventcalendar.phtml",
+         "listName":"list0"
+      }
+   ]
+}
