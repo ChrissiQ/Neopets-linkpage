@@ -76,8 +76,8 @@
 			}
             if (Target.is('ul.linklist span.listtitle')){
                 $(Target).empty();
-                input = $("<input type='text'></input>");
-                $(input).val(lists[listNum].longName);
+                input = $("<input type='text'></input><button>Submit</button>");
+                $($(input)[0]).val(lists[listNum].longName);
                 $(Target).append(input);
             }
             
@@ -462,6 +462,30 @@ $.getJSON("files.json", function(data){
 
 $('body').click(function(clickEvent){
 	chrissiUtils.parseClick($(clickEvent.target));
+});
+
+$('body').focusin(function(focusEvent){
+    console.log("Focus!"); 
+});
+$('body').focusout(function(focusEvent){
+    console.log("Unfocus!");
+    var focusTarget = $(focusEvent.target);
+    var focusList = $(focusTarget).parents('ul.linklist');
+    var focusTitle = $('span.listtitle');
+    console.log($($(focusTarget).html()));
+    console.log($('ul.linklist span.listtitle').html())
+    if ($($(focusTarget).html()).is($('ul.linklist span.listtitle').html())){
+        for (q=0;q<lists.length;q++){
+            console.log("Attempting to empty...");
+            console.log(focusList.html());
+            console.log($($('ul.linklist')[q]).html())
+            if (focusList.html() == $($('ul.linklist')[q]).html()){
+                console.log("Emptying...");
+                $(focusTitle).empty();
+                $(focusTitle).append(lists[q].longName);
+            }
+        }
+    }
 });
 
 // Updates timers every second.

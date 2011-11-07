@@ -46,10 +46,8 @@ ul.linklist{
 
 /* List title */
 span.listtitle{
-	overflow: hidden;
 	padding: 2px;
-	width: 100%;
-	float: left;
+	display: block;
 }
 span.listtitle input{
 	font: inherit;
