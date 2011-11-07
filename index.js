@@ -1,6 +1,6 @@
 ﻿function chrissiUtils(){		//	A set of utilities that I am using, inside an object to limit the scope, just for safety.
 	this.addedLines = 0; 		// Used to keep track of how many lines we've added.
-	this.neopetsGMTOffset = 7;	// Constant, may change based on Daylight Savings, this is neopets time offset from GMT.
+	this.neopetsGMTOffset = 8;	// Constant, may change based on Daylight Savings, this is neopets time offset from GMT.
 	
 	this.formatMS = function(ms){	// Formats a number of milliseconds as hr:mn:sc, for display purposes.
 		var sc = Math.floor(ms / 1000)
