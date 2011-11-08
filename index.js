@@ -253,12 +253,33 @@ function listObject(name, longName, linkObjects){
             lists[listNum].sortBy($.cookie("list" + listNum + "sortingmethod"));        
         }
         lists[listNum].load();
-    }
-
+    } 
+	
+	//Add this.elementHTML (list element structure) to the actual DOM of the page.
+	this.addNode = function(locationToAdd, nodeHTML){
+        var Target;
+		if (
+            (!locationToAdd) ||
+            (locationToAdd != "start" && locationToAdd != "end")){
+        locationToAdd = "end"
+        }//Set default arguments.
+		if (locationToAdd == "start"){	//Determine whether we are adding nodes to beginning
+			Target = $('ul#list' + this.listNum + 'h1');
+            Target.after(nodeHTML);
+		} else {
+			Target = $('ul#list' + this.listNum + ' li.addnew');
+            Target.before(nodeHTML);
+		}
+	}
+    
 	// Load list items from the array into the DOM.
 	this.load = function (){
 		for (y=0;y<this.linkObjects.length;y++){
-			this.linkObjects[y].addNode("end",this.listNum, this.linkObjects[y].elementHTML());
+			this.addNode("end",this.linkObjects[y].elementHTML());
+            this.linkObjects[y].listItem = $('li#neopets' + this.linkObjects[y].name);
+            this.linkObjects[y].linkItem = $(this.linkObjects[y].listItem).find('a');
+            this.linkObjects[y].timerElement = $(this.linkObjects[y].listItem).find('span')[2];
+            this.linkObjects[y].buttons = $(this.linkObjects[y].listItem).find('button');
 		}
 		$($("ul.linklist")[this.listNum]).find("li:odd").addClass("odd");
 	}
@@ -422,27 +443,6 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 			"<span><button>Done!</button><button>Oops!</button></span>"
 		);
 		return $(listEntry);
-	}
-	
-	//Add this.elementHTML (list element structure) to the actual DOM of the page.
-	this.addNode = function(locationToAdd, listNum, nodeHTML){
-        var Target;
-		if (
-            (!locationToAdd) ||
-            (locationToAdd != "start" && locationToAdd != "end")){
-        locationToAdd = "end"
-        }//Set default arguments.
-		if (locationToAdd == "start"){	//Determine whether we are adding nodes to beginning
-			Target = $('ul#list' + listNum + 'h1');
-            Target.after(nodeHTML);
-		} else {
-			Target = $('ul#list' + listNum + ' li.addnew');
-            Target.before(nodeHTML);
-		}
-		this.listItem = $('li#neopets' + this.name);
-		this.linkItem = $(this.listItem).find('a');
-		this.timerElement = $(this.listItem).find('span')[2];
-		this.buttons = $(this.listItem).find('button');
 	}
 	
 	
