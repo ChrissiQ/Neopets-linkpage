@@ -8,6 +8,10 @@
 		nextY.setFullYear(this.Today().getFullYear()+1);
 		return nextY;
 	}
+    
+    this.secondsToNextYear = function(){
+        return Math.floor((this.nextYear().getTime() - this.Today().getTime())/1000);
+    }
 	this.formatMS = function(sc){	// Formats a number of seconds as hr:mn:sc, for display purposes.
 		var mn = 0
 		var hr = 0
@@ -32,7 +36,7 @@
         }
     }
 	this.parseClick = function(Target){
-		if ($(Target).parents('ul').length){
+		if ($(Target).parents('ul.linklist').length){
             
 			var sortLabel;
 			var liElement = $(Target).parents('li');
@@ -41,6 +45,7 @@
             for (j=0;j<lists.length;j++){
                 if (parentListID == lists[j].name){
                     listNum = j;
+                    break;
                 }
             }
             var targetList = lists[listNum];
@@ -48,10 +53,12 @@
 			var linkObjectsLength = listLinkObjects.length;
 			
 			if (Target.is($('ul.linklist span.link a'))){				// onclick 'a' list item....
-				for (var i=0; i<listLinkObjects[linkObjectsLength]; i++){			
-					if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
-						lists[listNum].linkObjects[i].buttonAction("create");
-			}}}
+				for (i=0; i<linkObjectsLength; i++){			
+                    if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
+                        listLinkObjects[i].buttonAction("create");
+                    }
+				}
+            }
 			if (Target.is($('ul.linklist h1 a'))){				// onclick sorting symbol...
 				sortLabel = $(Target.parent());
 				if (sortLabel.text() == "Name▼"){
@@ -61,7 +68,7 @@
 				}
 				targetList.reload();
 			}
-			if (Target.is('ul.linklist button')){ 				// onclick 'button'...
+			if (Target.is($('ul.linklist li button'))){ 				// onclick 'button'...
 				if (Target.text() == "Oops!"){
 					for (i=0; i<linkObjectsLength; i++){			
 						if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
@@ -76,13 +83,67 @@
 			}
             if (Target.is('ul.linklist span.listtitle')){
                 $(Target).empty();
-                input = $("<input type='text'></input><button>Submit</button>");
+                input = $("<input type='text'></input>");
                 $($(input)[0]).val(lists[listNum].longName);
                 $(Target).append(input);
             }
             
 		}//if ($(Target).parents('ul').length){
 	}//parseClick
+    
+    
+    this.parseFcsOut = function(focusTarget){
+        var parentList = $(focusTarget).parents('ul.linklist');
+        var parentListID = $(parentList).attr('id');
+        var focusTitle = $(focusTarget).parent();
+        if ($(focusTarget).parent().is('span.listtitle')){
+            var listNum = $('ul.linklist').index(parentList);
+            lists[listNum].longName = $(focusTarget).val();
+            $(focusTitle).empty();
+            $(focusTitle).append(lists[listNum].longName);
+            
+            if ($.cookie('list' + listNum)){
+                $.cookie(
+                    'list' + listNum,
+                    JSON.stringify(lists[listNum]),
+                    {expires: chrissiUtils.secondsToNextYear()}
+                );
+            }
+            
+        }
+   }
+   
+    this.pushLists = function(){
+        
+        lists[0] = new listObject(
+            "list0",
+            "My Default List",
+            []
+        );
+        lists[0].initialize();
+        $.getJSON("files.json", function(data){
+            lists[0].populate(0, data.linkObjects);
+        });
+        var m = 1;
+        while ($.cookie("list" + m)){
+            var listFromCookie = JSON.parse($.cookie("list" + m));
+            lists[m] = new listObject(
+                listFromCookie.name,
+                listFromCookie.longName,
+                []
+            );
+            lists[m].initialize();
+            lists[m].populate(m, listFromCookie.linkObjects);
+            
+            m++;
+        }
+        lists[m] = new listObject(
+            "list" + m,
+            "New list",
+            []
+        );
+        lists[m].initialize();
+   }
 }
 
 function listObject(name, longName, linkObjects){
@@ -99,17 +160,19 @@ function listObject(name, longName, linkObjects){
 			linkObjects: this.linkObjects
 		}
 	}
-    this.makeArrayObjects = function(){ 
-        for (j=0;j<this.linkObjects.length;j++){
-            this.linkObjects[j] = new linkObject(
-                this.linkObjects[j].name,
-                this.linkObjects[j].numID,
-                this.linkObjects[j].duration,
-                this.linkObjects[j].longName,
-                this.linkObjects[j].url,
-                this.linkObjects[j].listName
-            );
-        }           
+    this.makeArrayObjects = function(listOfObjects){
+        var myArray = [];
+        for (j=0;j<listOfObjects.length;j++){
+            myArray.push(new linkObject(
+                listOfObjects[j].name,
+                listOfObjects[j].numID,
+                listOfObjects[j].duration,
+                listOfObjects[j].longName,
+                listOfObjects[j].url,
+                listOfObjects[j].listName
+            ));
+        }
+        return myArray;
     }
 	this.sorted = function(){
 		if ($.cookie("list" + this.listNum + "sortingmethod") !== null){
@@ -172,16 +235,30 @@ function listObject(name, longName, linkObjects){
 		"</div>");
 	}
 	// Initializes a new list in the DOM.
-	this.initialize = function(){	
+	this.initialize = function(){
+        this.listNum = $.inArray(this, lists);
 		$('#infoColumn').before(this.blankList());			
 		this.endingLi = $("li.addnew", "#" + this.name);	
 		this.listElement = $("ul#" + this.name);
 	}
+    
+    
+    
+    // Populates the list with information from a JSON file or cookie (listSource).
+    // List should already be initialized with this.initialize().
+    this.populate = function(listNum, listSource){
+        lists[listNum].listNum = listNum;
+        lists[listNum].linkObjects = lists[listNum].makeArrayObjects(listSource);
+        if ($.cookie("list" + listNum + "sortingmethod")){
+            lists[listNum].sortBy($.cookie("list" + listNum + "sortingmethod"));        
+        }
+        lists[listNum].load();
+    }
 
 	// Load list items from the array into the DOM.
 	this.load = function (){
 		for (y=0;y<this.linkObjects.length;y++){
-			this.linkObjects[y].addNode("end",this.listNum);
+			this.linkObjects[y].addNode("end",this.listNum, this.linkObjects[y].elementHTML());
 		}
 		$($("ul.linklist")[this.listNum]).find("li:odd").addClass("odd");
 	}
@@ -192,14 +269,15 @@ function listObject(name, longName, linkObjects){
 		this.load();
 	}
 	
+   // this.newLinkForm = function(){$(
+  //      return $.get("form.html")
+        
+        
+  //  );
 	this.addNewLink = function(list){
-	//	this.OpenForm();
-	//	array = this.formResults;
-	//	this.closeForm();
-	//	var
-	//	add node
-	//	create cookie
-		
+        $.get('form.html', function(data){
+            $($('ul#linklist')[listNum]).find()
+        });	
 	}
 	
 	
@@ -347,7 +425,7 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 	}
 	
 	//Add this.elementHTML (list element structure) to the actual DOM of the page.
-	this.addNode = function(locationToAdd, listNum){
+	this.addNode = function(locationToAdd, listNum, nodeHTML){
         var Target;
 		if (
             (!locationToAdd) ||
@@ -355,11 +433,11 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
         locationToAdd = "end"
         }//Set default arguments.
 		if (locationToAdd == "start"){	//Determine whether we are adding nodes to beginning
-			Target = $($('ul.linklist')[listNum]).find('h1');
-            Target.after(this.elementHTML());
+			Target = $('ul#list' + listNum + 'h1');
+            Target.after(nodeHTML);
 		} else {
-			Target = $($('ul.linklist')[listNum]).find('li.addnew');
-            Target.before(this.elementHTML());
+			Target = $('ul#list' + listNum + ' li.addnew');
+            Target.before(nodeHTML);
 		}
 		this.listItem = $('li#neopets' + this.name);
 		this.linkItem = $(this.listItem).find('a');
@@ -423,69 +501,42 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 }		
 
 var lists = [];
-$.getJSON("files.json", function(data){
-	lists[0] = data;
-    lists[0] = new listObject(
-        lists[0].name,
-        lists[0].longName,
-        lists[0].linkObjects
-    );
-    lists[0].listNum = lists.length-1;
-    lists[0].makeArrayObjects();
-    lists[0].initialize();
-    if (lists[0].sorted){
-        lists[0].sortBy($.cookie("list0sortingmethod"))
-    }
-    lists[0].load();
-    
-    lists[1] = new listObject(
-        "newlist",
-        "My New List",
-        JSON.parse($.cookie("list2"))
-    );
-    lists[1].listNum = lists.length-1;
-    lists[1].makeArrayObjects();
-    lists[1].initialize();
-    if (lists[1].sorted){
-        lists[1].sortBy($.cookie("list1sortingmethod"))
-    }
-    lists[1].load();
-    
-    lists[lists.length] = new listObject(
-        "magiclist",
-        "Magic List",
-        []
-    );
-    lists[lists.length-1].listNum = lists.length-1;
-    lists[lists.length-1].initialize();
-});
+/*var cookieObj = {
+   "name":"list1",
+   "longName":"Cookie List",
+   "linkObjects":[
+      {
+         "name":"fakehealing",
+         "numID":0,
+         "duration":1800,
+         "longName":"The Healing Springs",
+         "url":"http://www.neopets.com/faerieland/springs.phtml",
+         "listName":"list1"
+      },
+      {
+         "name":"fakemediocrity",
+         "numID":1,
+         "duration":2400,
+         "longName":"Wheel of Mediocrity",
+         "url":"http://www.neopets.com/prehistoric/mediocrity.phtml",
+         "listName":"list1"
+      }
+   ]
+};
+$.cookie(
+    "list1",
+    JSON.stringify(cookieObj),
+    { expires: chrissiUtils.secondsToNextYear() }
+);*/
+chrissiUtils.pushLists();
 
 $('body').click(function(clickEvent){
 	chrissiUtils.parseClick($(clickEvent.target));
 });
-
 $('body').focusin(function(focusEvent){
-    console.log("Focus!"); 
 });
 $('body').focusout(function(focusEvent){
-    console.log("Unfocus!");
-    var focusTarget = $(focusEvent.target);
-    var focusList = $(focusTarget).parents('ul.linklist');
-    var focusTitle = $('span.listtitle');
-    console.log($($(focusTarget).html()));
-    console.log($('ul.linklist span.listtitle').html())
-    if ($($(focusTarget).html()).is($('ul.linklist span.listtitle').html())){
-        for (q=0;q<lists.length;q++){
-            console.log("Attempting to empty...");
-            console.log(focusList.html());
-            console.log($($('ul.linklist')[q]).html())
-            if (focusList.html() == $($('ul.linklist')[q]).html()){
-                console.log("Emptying...");
-                $(focusTitle).empty();
-                $(focusTitle).append(lists[q].longName);
-            }
-        }
-    }
+    chrissiUtils.parseFcsOut($(focusEvent.target));
 });
 
 // Updates timers every second.
