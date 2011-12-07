@@ -156,3 +156,7 @@ div.column ul.linklist li span.add button{
 	padding: 3px;
 	font-weight: bold;
 }
+
+div.ender{
+	clear: both;
+}

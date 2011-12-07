@@ -1,5 +1,5 @@
 ﻿var chrissiUtils = new function(){	//	Scoped utilities.
-	this.neopetsGMTOffset = 7;      // Constant, may change based on Daylight Savings, this is neopets time offset from GMT.	
+	this.neopetsGMTOffset = 8;      // Constant, may change based on Daylight Savings, this is neopets time offset from GMT.	
 	this.Today = function(){
 		return new Date();
 	}
@@ -32,6 +32,11 @@
         for (i=0;i<lists.length;i++){
             for (j=0;j<lists[i].linkObjects.length;j++){             
                 lists[i].linkObjects[j].updateTimer();
+				
+				// If the timer reaches zero, make the link available again.
+				if (lists[i].linkObjects[j].nextIn() <= 0){
+					lists[i].linkObjects[j].makeAvailable();
+				}
             }
         }
     }
@@ -87,6 +92,21 @@
                 $($(input)[0]).val(lists[listNum].longName);
                 $(Target).append(input);
             }
+            if ($(Target).is('ul.linklist li.addnew .add a')){
+                lists[listNum].addNewLink();
+                $('#list' + listNum + "addnew")
+                    .find('div.close a')
+                    .attr('href', '#list' + listNum + "addnew");
+            }
+            if ($(Target).is('ul.linklist li.addnew .close a')){
+                $($(liElement).children())
+                    .not('span.add')
+                    .remove();
+            } 
+            if ($(Target).is('ul.linklist li.addnew button')){
+                lists[listNum].processNewLink($('ul.linklist li.addnew form'));
+                
+            }
             
 		}//if ($(Target).parents('ul').length){
 	}//parseClick
@@ -102,18 +122,25 @@
             $(focusTitle).empty();
             $(focusTitle).append(lists[listNum].longName);
             
-            if ($.cookie('list' + listNum)){
-                $.cookie(
-                    'list' + listNum,
-                    JSON.stringify(lists[listNum]),
-                    {expires: chrissiUtils.secondsToNextYear()}
-                );
-            }
+			// Save cookie with the new title.
+			$.cookie(
+				'list' + listNum,
+				JSON.stringify(lists[listNum]),
+				{expires: chrissiUtils.secondsToNextYear()}
+			);
+			$.cookie(
+				'list' + listNum + 'title',
+				lists[listNum].longName,
+				{expires: chrissiUtils.secondsToNextYear()}
+			);
+			alert("list" + listNum);
+			alert(encodeURIComponent(JSON.stringify(lists[listNum])));
             
         }
    }
    
     this.pushLists = function(){
+	// Mainline for list creation
         
         lists[0] = new listObject(
             "list0",
@@ -123,6 +150,11 @@
         lists[0].initialize();
         $.getJSON("files.json", function(data){
             lists[0].populate(0, data.linkObjects);
+			
+			//if (webStorageSupported){
+			//	alert(localStorage.getItem('one'));
+			//	localStorage.setItem('one', JSON.stringify(lists[0]));
+			//}
         });
         var m = 1;
         while ($.cookie("list" + m)){
@@ -149,7 +181,7 @@
 function listObject(name, longName, linkObjects){
 
 	this.name = name;
-	this.longName = longName
+	this.longName = longName;
 	this.linkObjects = linkObjects;
     this.listNum;
 	
@@ -227,8 +259,8 @@ function listObject(name, longName, linkObjects){
 					"<span>Next in<a href='#'>▼</a></span>" +
 					"<span>Mark Done</span>" +
 				"</h1>" +
-				"<li class='addnew permanent'>" +
-                    "<span class='add'><a href='#'>+</a></span>" +
+				"<li class='addnew permanent' id='list" + this.listNum + "addnew'>" +
+                    "<span class='add'><a href='#ender'>+</a></span>" +
                 "</li>"+
 				"<li class='endingSpacer permanent'></li>" +
 			"</ul>" +
@@ -241,11 +273,9 @@ function listObject(name, longName, linkObjects){
 		this.endingLi = $("li.addnew", "#" + this.name);	
 		this.listElement = $("ul#" + this.name);
 	}
-    
-    
-    
+  
     // Populates the list with information from a JSON file or cookie (listSource).
-    // List should already be initialized with this.initialize().
+    // List should already be initialized with this.initialize() before using.
     this.populate = function(listNum, listSource){
         lists[listNum].listNum = listNum;
         lists[listNum].linkObjects = lists[listNum].makeArrayObjects(listSource);
@@ -258,18 +288,24 @@ function listObject(name, longName, linkObjects){
 	//Add this.elementHTML (list element structure) to the actual DOM of the page.
 	this.addNode = function(locationToAdd, nodeHTML){
         var Target;
-		if (
+		/*if (
             (!locationToAdd) ||
             (locationToAdd != "start" && locationToAdd != "end")){
         locationToAdd = "end"
-        }//Set default arguments.
+        }//Set default arguments.*/
 		if (locationToAdd == "start"){	//Determine whether we are adding nodes to beginning
 			Target = $('ul#list' + this.listNum + 'h1');
+            console.log("start",Target);
             Target.after(nodeHTML);
-		} else {
+		} else if (locationToAdd == "end"){
 			Target = $('ul#list' + this.listNum + ' li.addnew');
+            console.log("end",Target);
             Target.before(nodeHTML);
-		}
+		} else if ($('ul.linklist').children(locationToAdd).length) {
+            Target = locationToAdd;
+            console.log("location",Target);
+            Target.append(nodeHTML);
+        }
 	}
     
 	// Load list items from the array into the DOM.
@@ -290,15 +326,16 @@ function listObject(name, longName, linkObjects){
 		this.load();
 	}
 	
-   // this.newLinkForm = function(){$(
-  //      return $.get("form.html")
+    /*this.newLinkForm = function(){$(
+        $.get("form.html")
         
         
-  //  );
-	this.addNewLink = function(list){
+    );*/
+	this.addNewLink = function(){
+        var thisFunc = this;
         $.get('form.html', function(data){
-            $($('ul#linklist')[listNum]).find()
-        });	
+            thisFunc.addNode($($('ul.linklist')[thisFunc.listNum]).find('li.addnew'),data);
+        }, 'html');	
 	}
 	
 	
@@ -306,6 +343,17 @@ function listObject(name, longName, linkObjects){
 	this.printNewListForm = function(){
 		
 	}
+    
+    this.processNewLink = function(linkForm){
+        console.log(linkForm);
+        
+        for(j=0;j<9;j++){
+            console.log(
+                $(linkForm).find('input')[j],
+                $($(linkForm).find('input')[j]).val()
+            );
+        }
+    }
 };
 function linkObject(name, passedNumber, duration, longName, url, listName){
 	// The main object representing an individual link on the page.
@@ -329,6 +377,8 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 		}
 	}
 	// Returns an expiry date based on the current time + dur seconds.
+	// Used for creating a cookie when the user has clicked the link recently.
+	// Not used for not-clicked links.
 	this.availableDate = function(dur){		
 		if (!dur){dur = this.duration;}		// Or if the duration is not a time but a fixed date,
 		var expires = new Date();				// Return that fixed date, properly formatted as a date.
@@ -387,9 +437,9 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 		} else if (dur == "decemberdaily"){						// Advent calendar case	
 				expires.setSeconds(0);
 				expires.setMinutes(0);
-				expires.setUTCHours(7);
+				expires.setUTCHours(chrissiUtils.neopetsGMTOffset);
 			if (Today.getUTCMonth() == 11){	
-				if (Today.getDate() == 31){
+				if (Today.getDate() == 30){
 					expires.setFullYear(Today.getFullYear()+1);
 				} else {
 				expires.setDate(Today.getUTCDate() +1);
@@ -405,6 +455,7 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 		}
 			return expires;
 	}
+
 
 	// Adds cookie with appropriate expiry date.
 	this.addCookie = function(){
@@ -447,6 +498,9 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 	
 	
 	// Returns the # of seconds from now that the link is available again.
+	// Used to find the next available date when a cookie doesn't exist and the
+	// link is not clicked.
+	// Usually zero...
 	this.nextIn = function(){	
 		var Today = new Date();
 		if ($.cookie("neopets" + this.name) !== null){
@@ -454,19 +508,19 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 			var ourExpiry = new Date(ourCookie);
 			return Math.floor((ourExpiry.getTime() - Today.getTime())/1000);			
 
-		} else if (this.duration == "decemberdaily"){
-			var DecFirst = new Date();
-			DecFirst.setMonth(11);
-			DecFirst.setDate(1);
-			DecFirst.setUTCHours(chrissiUtils.neopetsGMTOffset);
-			DecFirst.setMinutes(0);
-			DecFirst.setSeconds(0);
-			DecFirst.setMilliseconds(0);
-			if (Today.getTime() < DecFirst.getTime()){
-				return Math.floor((DecFirst.getTime() - Today.getTime())/1000);
-			} else {
-				return 0;
-			}
+		//} else if (this.duration == "decemberdaily"){
+		//	var DecFirst = new Date();
+		//	DecFirst.setMonth(11);
+		//	DecFirst.setDate(0);
+		//	DecFirst.setUTCHours(chrissiUtils.neopetsGMTOffset);
+		//	DecFirst.setMinutes(0);
+		//	DecFirst.setSeconds(0);
+		//	DecFirst.setMilliseconds(0);
+		//	if (Today.getTime() < DecFirst.getTime()){
+		//		return Math.floor((DecFirst.getTime() - Today.getTime())/1000);
+		//	} else {
+		//		return 0;
+		//	}
 		
 		} else {
 			return 0;
@@ -528,6 +582,10 @@ $.cookie(
     JSON.stringify(cookieObj),
     { expires: chrissiUtils.secondsToNextYear() }
 );*/
+
+var webStorageSupported = ('localStorage' in window) && window['localStorage'] !== null;
+
+
 chrissiUtils.pushLists();
 
 $('body').click(function(clickEvent){
