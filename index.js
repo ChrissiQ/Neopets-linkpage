@@ -8,6 +8,8 @@
 		nextY.setFullYear(this.Today().getFullYear()+1);
 		return nextY;
 	}
+	
+	this.webStorageSupported = ('localStorage' in window) && window['localStorage'] !== null;
     
     this.secondsToNextYear = function(){
         return Math.floor((this.nextYear().getTime() - this.Today().getTime())/1000);
@@ -104,7 +106,7 @@
                     .remove();
             } 
             if ($(Target).is('ul.linklist li.addnew button')){
-                lists[listNum].processNewLink($('ul.linklist li.addnew form'));
+                lists[listNum].processNewLink($('ul.linklist li.addnew div.form'));
                 
             }
             
@@ -123,12 +125,12 @@
             $(focusTitle).append(lists[listNum].longName);
             
 			// Save cookie with the new title.
-			$.cookie(
+			chrissiUtils.storage(
 				'list' + listNum,
 				JSON.stringify(lists[listNum]),
 				{expires: chrissiUtils.secondsToNextYear()}
 			);
-			$.cookie(
+			chrissiUtils.storage(
 				'list' + listNum + 'title',
 				lists[listNum].longName,
 				{expires: chrissiUtils.secondsToNextYear()}
@@ -150,15 +152,10 @@
         lists[0].initialize();
         $.getJSON("files.json", function(data){
             lists[0].populate(0, data.linkObjects);
-			
-			//if (webStorageSupported){
-			//	alert(localStorage.getItem('one'));
-			//	localStorage.setItem('one', JSON.stringify(lists[0]));
-			//}
         });
         var m = 1;
-        while ($.cookie("list" + m)){
-            var listFromCookie = JSON.parse($.cookie("list" + m));
+        while (chrissiUtils.storage("list" + m)){
+            var listFromCookie = JSON.parse(chrissiUtils.storage("list" + m));
             lists[m] = new listObject(
                 listFromCookie.name,
                 listFromCookie.longName,
@@ -176,6 +173,36 @@
         );
         lists[m].initialize();
    }
+	this.storage = function(name, storeData, expires){
+		if (storeData !== undefined){
+
+			if (chrissiUtils.webStorageSupported){
+				localStorage.setItem(name, storeData);
+			}
+			else {
+				if (expires.length){
+					$.cookie(name, storeData, {expires: expires})
+				} else {
+					$.cookie(name, storedata,
+							{ expires: chrissiUtils.secondsToNextYear() }
+					)// End cookieset function
+				}
+			}// End Cookie Case
+		
+		} // End post
+		
+		else if (name.length){
+			if (chrissiUtils.webStorageSupported){
+				return localStorage[name];
+			} else {
+				return $.cookie(name);
+			}
+		} // End get
+		
+		
+	} // End Storage function
+		
+// End chrissiUtils		
 }
 
 function listObject(name, longName, linkObjects){
@@ -207,7 +234,7 @@ function listObject(name, longName, linkObjects){
         return myArray;
     }
 	this.sorted = function(){
-		if ($.cookie("list" + this.listNum + "sortingmethod") !== null){
+		if (chrissiUtils.storage("list" + this.listNum + "sortingmethod") !== null){
 			return true;
 		} else {
 			return false;
@@ -215,16 +242,9 @@ function listObject(name, longName, linkObjects){
 	}
 	this.addSortCookie = function(sortType){
 		var thisSortType = sortType;
-		$.cookie(
+		chrissiUtils.storage(
 			"list" + this.listNum + "sortingmethod",
-			sortType, 
-			{ expires: 
-				Math.floor((
-					chrissiUtils.nextYear().getTime() - 
-					chrissiUtils.Today().getTime()) 
-				/ 1000)
-			}
-		);
+			sortType);
 	}
 	this.sortBy = function(tag){
 		if (tag === "alpha"){
@@ -279,8 +299,8 @@ function listObject(name, longName, linkObjects){
     this.populate = function(listNum, listSource){
         lists[listNum].listNum = listNum;
         lists[listNum].linkObjects = lists[listNum].makeArrayObjects(listSource);
-        if ($.cookie("list" + listNum + "sortingmethod")){
-            lists[listNum].sortBy($.cookie("list" + listNum + "sortingmethod"));        
+        if (chrissiUtils.storage("list" + listNum + "sortingmethod")){
+            lists[listNum].sortBy(chrissiUtils.storage("list" + listNum + "sortingmethod"));        
         }
         lists[listNum].load();
     } 
@@ -288,22 +308,14 @@ function listObject(name, longName, linkObjects){
 	//Add this.elementHTML (list element structure) to the actual DOM of the page.
 	this.addNode = function(locationToAdd, nodeHTML){
         var Target;
-		/*if (
-            (!locationToAdd) ||
-            (locationToAdd != "start" && locationToAdd != "end")){
-        locationToAdd = "end"
-        }//Set default arguments.*/
 		if (locationToAdd == "start"){	//Determine whether we are adding nodes to beginning
 			Target = $('ul#list' + this.listNum + 'h1');
-            console.log("start",Target);
             Target.after(nodeHTML);
 		} else if (locationToAdd == "end"){
 			Target = $('ul#list' + this.listNum + ' li.addnew');
-            console.log("end",Target);
             Target.before(nodeHTML);
 		} else if ($('ul.linklist').children(locationToAdd).length) {
             Target = locationToAdd;
-            console.log("location",Target);
             Target.append(nodeHTML);
         }
 	}
@@ -345,14 +357,20 @@ function listObject(name, longName, linkObjects){
 	}
     
     this.processNewLink = function(linkForm){
-        console.log(linkForm);
-        
-        for(j=0;j<9;j++){
-            console.log(
-                $(linkForm).find('input')[j],
-                $($(linkForm).find('input')[j]).val()
-            );
-        }
+		
+		var inputs = $(linkForm).find('input');
+		var textboxes = $(linkForm).find('input:text');
+		var radioboxes = $(linkForm).find('input:radio');
+		console.log("Textboxes: ", textboxes);
+		console.log("Radio: ", radioboxes);
+		for (var j=0;j<radioboxes.length;j++){
+			if ($(radioboxes[j]).is(':checked')){
+				console.log($(radioboxes[j]).val(), " checked");
+			}
+		}
+		for ( var k=0; k<textboxes.length; k++ ) {
+			console.log(k, " = ", $(textboxes[k]).val());
+		}
     }
 };
 function linkObject(name, passedNumber, duration, longName, url, listName){
@@ -405,6 +423,7 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 			}
 			
 			
+		// SNOWAGER IS COMPLETELY BROKEN
 		} else if (dur == "snowager"){								// Snowager case
 			expires.setSeconds(0);									// Can be REALLY confusing.
 			expires.setMinutes(0);									// 6-7am, 2-3pm, and 10-11pm neopian time (PDT)
@@ -459,22 +478,26 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 
 	// Adds cookie with appropriate expiry date.
 	this.addCookie = function(){
-		$.cookie(
+		chrissiUtils.storage(
 			"neopets" + this.name,
 			this.availableDate().toUTCString(),
-			{ expires: Math.floor(
+			Math.floor(
 				(this.availableDate().getTime() - chrissiUtils.Today().getTime())
-				/ 1000
-			)}
+				/ 1000)
 		);
 	}
 	// Deletes cookie specific to this element.
 	this.deleteCookie = function(){	
-		$.cookie("neopets" + this.name, null);
+		chrissiUtils.storage("neopets" + this.name, null);
 	}
+	
 	// Get the expiry date from the cookie.
 	this.available = function(){
-		return new Date($.cookie("neopets" + this.name));
+		if (chrissiUtils.storage("neopets" + this.name)){
+			return new Date(chrissiUtils.storage("neopets" + this.name));
+		} else {
+			return chrissiUtils.Today();
+		}
 	}
 	// Not being used yet... not sure if functional.  Deletes the node off the DOM tree.
 	this.deleteNode = function(numInArray){
@@ -503,10 +526,15 @@ function linkObject(name, passedNumber, duration, longName, url, listName){
 	// Usually zero...
 	this.nextIn = function(){	
 		var Today = new Date();
-		if ($.cookie("neopets" + this.name) !== null){
+		if (chrissiUtils.storage("neopets" + this.name) !== null){
 			var ourCookie = this.available();
 			var ourExpiry = new Date(ourCookie);
-			return Math.floor((ourExpiry.getTime() - Today.getTime())/1000);			
+			if (ourExpiry.getTime() - Today.getTime() > 0){
+				return Math.floor((ourExpiry.getTime() - Today.getTime())/1000);
+			} else {
+				return 0;
+			}
+			
 
 		//} else if (this.duration == "decemberdaily"){
 		//	var DecFirst = new Date();
@@ -577,13 +605,11 @@ var lists = [];
       }
    ]
 };
-$.cookie(
+chrissiUtils.storage(
     "list1",
     JSON.stringify(cookieObj),
-    { expires: chrissiUtils.secondsToNextYear() }
+    chrissiUtils.secondsToNextYear()
 );*/
-
-var webStorageSupported = ('localStorage' in window) && window['localStorage'] !== null;
 
 
 chrissiUtils.pushLists();
