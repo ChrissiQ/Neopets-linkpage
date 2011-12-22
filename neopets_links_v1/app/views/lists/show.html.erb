@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @list.name %>
+  
+  <% @list.links.map do |link| %>
+	
+	<br /><%= link_to link.name, link.url %>
+	<% end %>
+</p>
+
+<p>
+  <h3>Add a new link to this list</h3>
+</p>
+
+<%= render 'links/form' %>
+<%= link_to 'Edit', edit_list_path(@list) %> |
+<%= link_to 'Back', lists_path %>

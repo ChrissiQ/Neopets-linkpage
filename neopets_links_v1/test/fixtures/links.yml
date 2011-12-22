@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  url: MyString
+  timer_hms: 2011-12-17 20:38:59
+  timer_daily: false
+  timer_monthly: false
+  timer_specific_month: 1
+
+two:
+  name: MyString
+  url: MyString
+  timer_hms: 2011-12-17 20:38:59
+  timer_daily: false
+  timer_monthly: false
+  timer_specific_month: 1
