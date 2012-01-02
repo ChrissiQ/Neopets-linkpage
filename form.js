@@ -8,7 +8,7 @@ $('body').click(function(clickEvent){
 		}
 	
 	}
-return false; // Stops the button from automatically reloading the page.
+return false; // Stops the button from automatically reloading the page, hopefully.
 });
 $('input.numbers').live('keyup', function() {
   $(this).val($(this).val().replace(/[^0-9]/g, ''));

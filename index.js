@@ -45,6 +45,7 @@
 	this.parseClick = function(Target){
 		if ($(Target).parents('ul.linklist').length){
             
+			// Prepare information to use in clicks
 			var sortLabel;
 			var liElement = $(Target).parents('li');
 			var parentListID = $($(Target).parents('ul.linklist')).attr('id');
@@ -59,14 +60,17 @@
 			var listLinkObjects = lists[listNum].linkObjects;
 			var linkObjectsLength = listLinkObjects.length;
 			
-			if (Target.is($('ul.linklist span.link a'))){				// onclick 'a' list item....
+			// onclick 'a' list item....
+			if (Target.is($('ul.linklist span.link a'))){
 				for (i=0; i<linkObjectsLength; i++){			
                     if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
                         listLinkObjects[i].buttonAction("create");
                     }
 				}
             }
-			if (Target.is($('ul.linklist h1 a'))){				// onclick sorting symbol...
+			
+			// onclick sorting symbol...
+			if (Target.is($('ul.linklist h1 a'))){
 				sortLabel = $(Target.parent());
 				if (sortLabel.text() == "Name▼"){
 					targetList.sortBy("alpha");
@@ -75,7 +79,9 @@
 				}
 				targetList.reload();
 			}
-			if (Target.is($('ul.linklist li button'))){ 				// onclick 'button'...
+			
+			// onclick 'button'...
+			if (Target.is($('ul.linklist li button'))){
 				if (Target.text() == "Oops!"){
 					for (i=0; i<linkObjectsLength; i++){			
 						if ("neopets" + listLinkObjects[i].name == liElement.attr('id')){
@@ -88,23 +94,29 @@
 							listLinkObjects[i].buttonAction("create");
 				}}}
 			}
+			
+			// onclick the title of a list
             if (Target.is('ul.linklist span.listtitle')){
                 $(Target).empty();
                 input = $("<input type='text'></input>");
                 $($(input)[0]).val(lists[listNum].longName);
                 $(Target).append(input);
             }
+			// onclick the plus symbol to open the 'add link' form
             if ($(Target).is('ul.linklist li.addnew .add a')){
                 lists[listNum].addNewLink();
                 $('#list' + listNum + "addnew")
                     .find('div.close a')
                     .attr('href', '#list' + listNum + "addnew");
             }
+			// onclick the minus symbol to close the list form
             if ($(Target).is('ul.linklist li.addnew .close a')){
                 $($(liElement).children())
                     .not('span.add')
                     .remove();
-            } 
+            }
+			
+			// onclick add new submission
             if ($(Target).is('ul.linklist li.addnew button')){
                 lists[listNum].processNewLink($('ul.linklist li.addnew div.form'));
                 
@@ -135,8 +147,8 @@
 				lists[listNum].longName,
 				{expires: chrissiUtils.secondsToNextYear()}
 			);
-			alert("list" + listNum);
-			alert(encodeURIComponent(JSON.stringify(lists[listNum])));
+			//alert("list" + listNum);
+			//alert(encodeURIComponent(JSON.stringify(lists[listNum])));
             
         }
    }
@@ -174,12 +186,15 @@
         lists[m].initialize();
    }
 	this.storage = function(name, storeData, expires){
+		// If we are defining something to store, store it.
 		if (storeData !== undefined){
-
+			
+			// If we have html5 storage in the browser, use it!
 			if (chrissiUtils.webStorageSupported){
 				localStorage.setItem(name, storeData);
 			}
 			else {
+				// Otherwise, use inferior cookie storage.
 				if (expires.length){
 					$.cookie(name, storeData, {expires: expires})
 				} else {
@@ -191,6 +206,7 @@
 		
 		} // End post
 		
+		// If we are not defining something to store, get what is stored.
 		else if (name.length){
 			if (chrissiUtils.webStorageSupported){
 				return localStorage[name];
@@ -361,6 +377,10 @@ function listObject(name, longName, linkObjects){
 		var inputs = $(linkForm).find('input');
 		var textboxes = $(linkForm).find('input:text');
 		var radioboxes = $(linkForm).find('input:radio');
+		
+		
+		
+		// TESTING SCRIPT
 		console.log("Textboxes: ", textboxes);
 		console.log("Radio: ", radioboxes);
 		for (var j=0;j<radioboxes.length;j++){
@@ -371,6 +391,50 @@ function listObject(name, longName, linkObjects){
 		for ( var k=0; k<textboxes.length; k++ ) {
 			console.log(k, " = ", $(textboxes[k]).val());
 		}
+		
+		
+		// Find the duration from these inputs.
+		var duration;
+		
+		// MINUTES
+		if ($(radioboxes[0]).is(':checked')){
+			duration = 	parseInt($(textboxes[2]).val())*60 +
+						parseInt($(textboxes[3]).val())*60*60;
+		
+		// DAILY	
+		} else if ($(radioboxes[1]).is(':checked')){
+			duration = "daily";
+		
+		// WEEKLY	
+		} else if ($(radioboxes[2]).is(':checked')){
+			duration = "weekly";
+			
+		// MONTHLY
+		} else if ($(radioboxes[3]).is(':checked')){
+			duration = "monthly";
+		
+		// NONE
+		} else {
+			duration = 0;
+		}
+		
+		// If there is info, save it.  And remove the box.
+		var links = lists[this.listNum].linkObjects;
+		var linksLength = links.length;
+		links[linksLength] = new linkObject(
+			$(textboxes[0]).val(),
+			linksLength,
+			duration,
+			$(textboxes[0]).val(),
+			$(textboxes[1]).val(),
+			"list" + this.listNum
+			);
+		
+		chrissiUtils.storage("list" + this.listNum, JSON.stringify(this));
+		lists[this.listNum].reload();
+		
+		
+		// If not, do nothing.
     }
 };
 function linkObject(name, passedNumber, duration, longName, url, listName){
