@@ -398,8 +398,21 @@ function listObject(name, longName, linkObjects){
 		
 		// MINUTES
 		if ($(radioboxes[0]).is(':checked')){
-			duration = 	parseInt($(textboxes[2]).val())*60 +
-						parseInt($(textboxes[3]).val())*60*60;
+			var minutes_duration;
+			var hours_duration;
+			if ($(textboxes[2]).val() > 0){
+				minutes_duration = parseInt($(textboxes[2]).val())*60;
+			} else {
+				minutes_duration = 0;
+			}
+			if ($(textboxes[3]).val() > 0){
+				hours_duration = parseInt($(textboxes[3]).val())*60*60;
+			} else {
+				hours_duration = 0;
+			}
+			duration = minutes_duration + hours_duration;
+			console.log(minutes_duration);
+			console.log(hours_duration);
 		
 		// DAILY	
 		} else if ($(radioboxes[1]).is(':checked')){
