@@ -302,7 +302,7 @@ function listObject(name, longName, linkObjects){
 			"</ul>" +
 		"</div>");
 	}
-	// Initializes a new list in the DOM.
+	// Initializes a new blank list in the DOM.
 	this.initialize = function(){
         this.listNum = $.inArray(this, lists);
 		$('#infoColumn').before(this.blankList());			
@@ -354,44 +354,17 @@ function listObject(name, longName, linkObjects){
 		this.load();
 	}
 	
-    /*this.newLinkForm = function(){$(
-        $.get("form.html")
-        
-        
-    );*/
 	this.addNewLink = function(){
         var thisFunc = this;
         $.get('form.html', function(data){
             thisFunc.addNode($($('ul.linklist')[thisFunc.listNum]).find('li.addnew'),data);
         }, 'html');	
 	}
-	
-	
-	
-	this.printNewListForm = function(){
-		
-	}
-    
     this.processNewLink = function(linkForm){
 		
 		var inputs = $(linkForm).find('input');
 		var textboxes = $(linkForm).find('input:text');
 		var radioboxes = $(linkForm).find('input:radio');
-		
-		
-		
-		// TESTING SCRIPT
-		console.log("Textboxes: ", textboxes);
-		console.log("Radio: ", radioboxes);
-		for (var j=0;j<radioboxes.length;j++){
-			if ($(radioboxes[j]).is(':checked')){
-				console.log($(radioboxes[j]).val(), " checked");
-			}
-		}
-		for ( var k=0; k<textboxes.length; k++ ) {
-			console.log(k, " = ", $(textboxes[k]).val());
-		}
-		
 		
 		// Find the duration from these inputs.
 		var duration;
@@ -400,19 +373,14 @@ function listObject(name, longName, linkObjects){
 		if ($(radioboxes[0]).is(':checked')){
 			var minutes_duration;
 			var hours_duration;
-			if ($(textboxes[2]).val() > 0){
-				minutes_duration = parseInt($(textboxes[2]).val())*60;
-			} else {
-				minutes_duration = 0;
-			}
-			if ($(textboxes[3]).val() > 0){
-				hours_duration = parseInt($(textboxes[3]).val())*60*60;
-			} else {
-				hours_duration = 0;
-			}
+			// If minutes are entered, use them.
+			minutes_duration = 	($(textboxes[2]).val() > 0) ?
+								parseInt($(textboxes[2]).val())*60 : 0;
+			// If hours are entered, use them.
+			hours_duration = 	($(textboxes[3]).val() > 0) ?
+								parseInt($(textboxes[3]).val())*60*60 : 0;
+			// Then add up the minutes and hours (we measure in seconds).
 			duration = minutes_duration + hours_duration;
-			console.log(minutes_duration);
-			console.log(hours_duration);
 		
 		// DAILY	
 		} else if ($(radioboxes[1]).is(':checked')){
@@ -431,7 +399,8 @@ function listObject(name, longName, linkObjects){
 			duration = 0;
 		}
 		
-		// If there is info, save it.  And remove the box.
+		// Add the new link to the list in local array.  Later push from array
+		// to storage.
 		var links = lists[this.listNum].linkObjects;
 		var linksLength = links.length;
 		links[linksLength] = new linkObject(
@@ -443,11 +412,13 @@ function listObject(name, longName, linkObjects){
 			"list" + this.listNum
 			);
 		
+		// Save to storage.
 		chrissiUtils.storage("list" + this.listNum, JSON.stringify(this));
+		
+		// Refresh the list view to display the newly added link.
 		lists[this.listNum].reload();
-		
-		
-		// If not, do nothing.
+		// Remove the form.
+		$("#list" + this.listNum + " .form").remove();
     }
 };
 function linkObject(name, passedNumber, duration, longName, url, listName){
