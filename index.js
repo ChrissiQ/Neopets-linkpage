@@ -31,8 +31,10 @@
 		return hr + ":" + mn + ":" + sc
 	}
     this.updateAllTimers = function(){
-        for (i=0;i<lists.length;i++){
-            for (j=0;j<lists[i].links.length;j++){             
+		var listsLength = lists.length;
+        for (i=0;i<listsLength;i++){
+			var linksLength = lists[i].links.length;
+            for (j=0;j<linksLength;j++){             
                 lists[i].links[j].updateTimer();
 				
 				// If the timer reaches zero, make the link available again.
@@ -63,17 +65,11 @@
 			var listElementInArray;
 			var listsLength = lists.length;
 			for (q=0;q<listsLength;q++){
-					console.log("Hi!",q);
-				if (lists[q].ID == listID){
-					listElementInArray = q;
-			
-			var list = lists[listElementInArray];
-				}
+				if (lists[q].ID == listID) listElementInArray = q;
 			}
-			console.log("Lists length:", lists.length)
-			console.log("List ID:", listID);
-			console.log("Num:", listElementInArray);
-			console.log("List:", list);
+			var list = lists[listElementInArray];
+			
+			console.log("List element in array:", listElementInArray);
 
 				
 			// LIST TITLE
@@ -137,6 +133,7 @@
 						linkElementInArray = j;
 					}
 				}
+				console.log("Link element in array:",linkElementInArray);
 				
 				var link = links[linkElementInArray];
 				
@@ -161,8 +158,9 @@
 						link.name + "?  This action is permanent!"
 					);
 					if (yes==true){
-						links.splice(linkElementInArray,1);
-						chrissiUtils.storage("list" + listID, JSON.stringify(lists[listID]))
+						links = links.splice(linkElementInArray,1);
+						console.log(lists[listElementInArray]);
+						chrissiUtils.storage("list" + listID.toString(), JSON.stringify(lists[listID]))
 						list.reloadDOM();
 					}
 				}
@@ -200,22 +198,28 @@
    }
    
     this.pushLists = function(){
-	// Mainline for list creation
-        
 		
-		// Create and load default list.
-        lists[0] = new listObject(
-            0,
-            "My Default List",
-            []
-        );
-        lists[0].initialize();
-        $.getJSON("files.json", function(data){
-            lists[0].load(data.links);
-        });
+	// Create and load default list.
+		
+		var m;
+		if (chrissiUtils.storage("list0")){
+			m = 0;
+		} else {
+			lists[0] = new listObject(
+				0,
+				"My Default List",
+				[]
+			);
+			m=1;
+			lists[0].initialize();
+			$.getJSON("files.json", function(data){
+				lists[0].load(data.links);
+			});
+
+		}
 		
 		// Create and load first saved list, if exists.
-        var m = 1;
+
         while (chrissiUtils.storage("list" + m)){
             var listFromCookie = JSON.parse(chrissiUtils.storage("list" + m));
             lists[m] = new listObject(
@@ -354,6 +358,7 @@ function listObject(ID, name, links){
 		
 		// Push links from newLinks into the links array storage.
         for ( j=0 ; j<newLinks.length ; j++ ){
+			console.log(newLinks[j]);
             this.links.push(new linkObject(
                 newLinks[j].ID,
                 newLinks[j].name,
@@ -490,8 +495,8 @@ function linkObject(ID, name, url, duration, listID){
 		return {
 			ID: this.ID,
 			name: this.name,
-			duration: this.duration,
 			url: this.url,
+			duration: this.duration,
 			listID: this.listID
 		}
 	}
