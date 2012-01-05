@@ -160,3 +160,7 @@ div.column ul.linklist li span.add button{
 div.ender{
 	clear: both;
 }
+
+div#infoColumn{
+	width: 30em;
+}

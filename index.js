@@ -38,9 +38,8 @@
                 lists[i].links[j].updateTimer();
 				
 				// If the timer reaches zero, make the link available again.
-				if (lists[i].links[j].nextIn() <= 0){
+				if (lists[i].links[j].nextIn() <= 0)
 					lists[i].links[j].makeAvailable();
-				}
             }
         }
     }
@@ -634,12 +633,12 @@ function linkObject(ID, name, url, duration, listID){
 	// link is not clicked.
 	// Usually zero...
 	this.nextIn = function(){	
-		var Today = new Date();
+		var now = new Date();
 		if (chrissiUtils.storage(this.clickedExpiresString) !== null) {
 			var available = this.clickedExpires();
 			var ourExpiry = new Date(available);
-			if (ourExpiry.getTime() - Today.getTime() > 0){
-				return Math.floor((ourExpiry.getTime() - Today.getTime())/1000);
+			if (ourExpiry.getTime() - now.getTime() > 0){
+				return Math.floor((ourExpiry.getTime() - now.getTime())/1000);
 			} else {
 				return 0;
 		}
@@ -663,6 +662,8 @@ function linkObject(ID, name, url, duration, listID){
 			return 0;
 		}
 	}
+	
+	this.nextInCached = this.nextIn();
 		
 	// Returns the string to display in the page, for when the link is available again.
 	this.nextInString = function(){
