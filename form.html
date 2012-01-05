@@ -1,0 +1,37 @@
+<script type="text/javascript" src="form.js"></script>
+<script type="text/javascript" src="jquery.validate.min.js"></script>
+<div class="form">
+	<div class="floatright close"><a href="#">-</a></div>
+	<div class="legend"><legend><strong>Add a link</strong></legend></div>
+	<div class="formelement">
+		<span class="label"><label>Link Name:</label></span>
+		<span><input type='text' class='text'/></span>
+	</div>
+	<div class="formelement">
+		<span class="label"><label>Address (URL):</label></span>
+		<span><input type='text' class='text'/></span>
+	</div>
+	<div>
+		<span class="label"><label>Frequency:</label></span>
+		<span class="options">
+			<div><input type='radio' name='frequency' class='radio' value='newlinkminutes'/>
+				<label for='newlinkminutes'>Minutes</label> <input type='text' class='numbers' maxlength='6'/>
+				<label for='newlinkminutes'>Hours</label> <input type='text' class='numbers' maxlength='6'/>
+			</div>
+			<div><input type='radio' name='frequency' class='radio' value='newlinkdaily'/>
+				<label for='newlinkdaily'>Daily</label>
+			</div>
+			<div><input type='radio' name='frequency' class='radio' value='newlinkweekly'/>
+				<label for='newlinkweekly'>Weekly</label>
+			</div>
+			<div><input type='radio' name='frequency' class='radio' value='newlinkmonthly'/>
+				<label for='newlinkmonthly'>Monthly</label>
+			</div>
+			<div><input type='radio' name='frequency' class='radio' value='newlinkNoFrequency'/>
+				<label for='newlinkNoFrequency'>None (no timer)</label>
+			</div>
+		</span>
+		<div class="clearfix"> </div>
+	</div>
+	<div><button>Done</button></div>
+</div>
