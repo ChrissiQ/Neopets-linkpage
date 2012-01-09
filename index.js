@@ -91,12 +91,10 @@
 			
 			// OPEN ADD LINK FORM
 			if (Target.is('.list button.open-form')){
-				console.log("Clicked open!");
 				list.openNewLinkForm();
 			}
 			
 			if (Target.is('.list button.close-form')){
-				console.log("Clicked close!");
 				list.closeNewLinkForm();
 			}
 			
@@ -145,7 +143,7 @@
 				// REMOVE A LINK
 				if (Target.is('.list td.remove button')){
 					var yes=confirm(
-						"Are you sure you want to remove the link" +
+						"Are you sure you want to remove the link " +
 						link.name + "?  This action is permanent!"
 					);
 					if (yes==true){
@@ -186,8 +184,6 @@
 				lists[listID].name,
 				{expires: chrissiUtils.secondsToNextYear()}
 			);
-			//alert("list" + listID);
-			//alert(encodeURIComponent(JSON.stringify(lists[listID])));
             
         }
    }
