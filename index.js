@@ -169,7 +169,9 @@
 		var listID = parseInt(listID_DOM.slice(4));
         var focusTitle = $(focusTarget).parent();
         if ($(focusTarget).is('.title input')){
-            lists[listID].name = $(focusTarget).val();
+            lists[listID].name = ($(focusTarget).val().length)
+				? $(focusTarget).val()
+				: ".";
             $(focusTitle).empty();
             $(focusTitle).append(lists[listID].name);
             
