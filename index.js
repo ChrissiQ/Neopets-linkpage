@@ -1,4 +1,4 @@
-﻿var chrissiUtils = new function(){	//	Scoped utilities.
+﻿var util = new function(){	//	Scoped utilities.
 	this.neopetsGMTOffset = 8;      // Constant, may change based on Daylight Savings, this is neopets time offset from GMT.	
 	this.Today = function(){
 		return new Date();
@@ -35,10 +35,10 @@
         for (i=0;i<listsLength;i++){
 			var linksLength = lists[i].links.length;
             for (j=0;j<linksLength;j++){             
-                lists[i].links[j].updateTimer();
+                lists[i].links[j].updateTimerDOM();
 				
 				// If the timer reaches zero, make the link available again.
-				if (lists[i].links[j].nextIn() <= 0)
+				if (lists[i].links[j].timer <= 0)
 					lists[i].links[j].makeAvailable();
             }
         }
@@ -147,10 +147,15 @@
 						link.name + "?  This action is permanent!"
 					);
 					if (yes==true){
+						
+						// Remove any remaining trace of the link in storage.
+						if (util.storage(link.clickedExpiresString))
+							util.storage(link.clickedExpiresString, null);	
+						
 						// Delete link from stored array
 						links = links.splice(linkElementInArray,1);
 						// Store new array
-						chrissiUtils.storage(
+						util.storage(
 							"list" + listID.toString(),
 							JSON.stringify(lists[listID])
 						);
@@ -176,15 +181,15 @@
             $(focusTitle).append(lists[listID].name);
             
 			// Save with the new title.
-			chrissiUtils.storage(
+			util.storage(
 				'list' + listID,
 				JSON.stringify(lists[listID]),
-				{expires: chrissiUtils.secondsToNextYear()}
+				{expires: util.secondsToNextYear()}
 			);
-			chrissiUtils.storage(
+			util.storage(
 				'list' + listID + 'title',
 				lists[listID].name,
-				{expires: chrissiUtils.secondsToNextYear()}
+				{expires: util.secondsToNextYear()}
 			);
             
         }
@@ -195,7 +200,7 @@
 	// Create and load default list.
 		
 		var m;
-		if (chrissiUtils.storage("list0")){
+		if (util.storage("list0")){
 			m = 0;
 		} else {
 			lists[0] = new listObject(
@@ -213,8 +218,8 @@
 		
 		// Create and load first saved list, if exists.
 
-        while (chrissiUtils.storage("list" + m)){
-            var listFromCookie = JSON.parse(chrissiUtils.storage("list" + m));
+        while (util.storage("list" + m)){
+            var listFromCookie = JSON.parse(util.storage("list" + m));
             lists[m] = new listObject(
 				listFromCookie.ID,
                 listFromCookie.name,
@@ -239,7 +244,7 @@
 		if (storeData !== undefined){
 			
 			// If we have html5 storage in the browser, use it!
-			if (chrissiUtils.webStorageSupported){
+			if (util.webStorageSupported){
 				localStorage.setItem(ID, storeData);
 			}
 			else {
@@ -248,7 +253,7 @@
 					$.cookie(name, storeData, {expires: expires})
 				} else {
 					$.cookie(name, storedata,
-							{ expires: chrissiUtils.secondsToNextYear() }
+							{ expires: util.secondsToNextYear() }
 					)// End cookieset function
 				}
 			}// End Cookie Case
@@ -257,7 +262,7 @@
 		
 		// If we are not defining something to store, get what is stored.
 		else if (ID.length){
-			if (chrissiUtils.webStorageSupported){
+			if (util.webStorageSupported){
 				return localStorage[ID];
 			} else {
 				return $.cookie(ID);
@@ -268,7 +273,7 @@
 	return 0;	
 	} // End Storage function
 		
-// End chrissiUtils		
+// End util		
 }
 
 function listObject(ID, name, links){
@@ -285,7 +290,7 @@ function listObject(ID, name, links){
 		}
 	}
 	this.sorted = function(){
-		var sortingMethod = chrissiUtils.storage("list" + this.ID.toString() + "sortingmethod");
+		var sortingMethod = util.storage("list" + this.ID.toString() + "sortingmethod");
 		return (sortingMethod !== null)
 			? true
 			: false;
@@ -302,14 +307,14 @@ function listObject(ID, name, links){
 			})
 		} else {
 			this.links.sort(function(a,b){
-				var value = a.nextIn() - b.nextIn();
+				var value = a.timer - b.timer;
 				if (value > 0) changed = true;
 				return value;
 			})
 		}
 		if (!changed) this.links.reverse();
 
-		chrissiUtils.storage(
+		util.storage(
 			"list" + this.ID.toString() + "sortingmethod",
 			sortingMethod);
 	}
@@ -362,7 +367,7 @@ function listObject(ID, name, links){
             ));
         }
 		
-		var sortingMethod = chrissiUtils.storage("list" + this.ID.toString() + "sortingmethod");
+		var sortingMethod = util.storage("list" + this.ID.toString() + "sortingmethod");
         if (sortingMethod){
 			this.sortBy(sortingMethod);
 		}
@@ -393,6 +398,8 @@ function listObject(ID, name, links){
 	// Load list items from the array into the DOM.
 	this.loadDOM = function (){
 		for ( y=0 ; y<this.links.length ; y++ ){
+			
+			this.links[y].setTimer();
 			this.addNode( "end" , this.links[y].elementHTML() );
 			
 			// These might not belong here.  Find a better place for them later.
@@ -480,7 +487,7 @@ function listObject(ID, name, links){
 		);
 		
 		// Push from array to storage.
-		chrissiUtils.storage("list" + this.ID.toString(), JSON.stringify(this));
+		util.storage("list" + this.ID.toString(), JSON.stringify(this));
 		
 		// Refresh the list view to display the newly added link.
 		this.reloadDOM();
@@ -509,54 +516,96 @@ function linkObject(ID, name, url, duration, listID){
 			listID: this.listID
 		}
 	}
-	// Returns an expiry date based on the current time + duration seconds.
-	// Used for creating a cookie when the user has clicked the link recently.
-	// Not used for not-clicked links.
-	this.availableDate = function(){		
-		var expires = new Date();				// Return that fixed date, properly formatted as a date.
-		var Today = new Date();					// All dates need to be in Neopian time which is PDT!
+	this.timer = 0;
+
+	this.clickedExpiresString =
+		"list" + this.listID.toString() +
+		"_link" + this.ID.toString() +
+		"_clicked_expires";
 		
+	// Store link click info
+	this.addClickedExpiresInfo = function(){
+		util.storage(
+			this.clickedExpiresString,
+			this.timer.toUTCString(),
+			Math.floor(
+				(this.availableDate().getTime() - util.Today().getTime())
+				/ 1000)
+		);
+	}
+	// Remove clicked expires info.
+	this.removeClickedExpiresInfo = function(){	
+		util.storage( this.clickedExpiresString , null );
+	}
+	
+	// Generate and return the structure of the list element.  Does not add to
+	// DOM, just generates and returns a jquery object.
+	this.elementHTML = function(){			
+		var listEntry = $(
+			"<tr id='list" + this.listID.toString() +
+			"_link" + this.ID.toString() + "'></tr>"
+		);
+		$(listEntry).append(
+			"<td class='remove'><button class='btn small'>-</button></td>" +
+			"<td class='link'><a href='" + this.url + "'>" + this.name + "</a></td>" +
+			"<td class='timer'>" + this.updatedTimer() + "</td>" +
+			"<td><button class='add btn primary small'>Done!</button><button class='remove btn small'>Oops!</button></td>"
+		);
+		return $(listEntry);
+	}
+	this.newTimer = function(){		// Use when someone clicks to set a timer.
+		var expires = new Date();
+		var now = new Date();
 
-
-		if (this.duration=="daily"){										// Daily case
+		// Daily case
+		if (this.duration=="daily"){
 			expires.setSeconds(0);
 			expires.setMinutes(0);
-			expires.setUTCHours(chrissiUtils.neopetsGMTOffset);
-			if (Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset){ //Midnight neopets time
-				expires.setDate(Today.getUTCDate() +1);
+			expires.setUTCHours(util.neopetsGMTOffset);
+			if (now.getUTCHours() >= util.neopetsGMTOffset){ //Midnight neopets time
+				expires.setDate(now.getUTCDate() +1);
 			}
 
-			
-		} else if (this.duration == "monthly"){							// Monthly case
+		// Monthly case			
+		} else if (this.duration == "monthly"){
 			expires.setSeconds(0);
 			expires.setMinutes(0);
-			expires.setUTCHours(chrissiUtils.neopetsGMTOffset);
+			expires.setUTCHours(util.neopetsGMTOffset);
 			expires.setDate(1);
-			if (Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset){ //Midnight neopets time
-				expires.setMonth(Today.getUTCMonth()+1);
+			if (now.getUTCHours() >= util.neopetsGMTOffset){ //Midnight neopets time
+				expires.setMonth(now.getUTCMonth()+1);
 			}
 			
-			
-		// SNOWAGER IS COMPLETELY BROKEN
-		} else if (this.duration == "snowager"){								// Snowager case
-			expires.setSeconds(0);									// Can be REALLY confusing.
-			expires.setMinutes(0);									// 6-7am, 2-3pm, and 10-11pm neopian time (PDT)
+		
+		// Snowager case	
+		// SNOWAGER IS COMPLETELY BROKEN and really confusing so I am
+		// not fixing it just yet.  There are more important things.
+		//
+		// 6-7am, 2-3pm, and 10-11pm neopian time (PDT)
+		} else if (this.duration == "snowager"){
+			expires.setSeconds(0);
+			expires.setMinutes(0);									
 
 			
 			//Case after 6am and before 2pm.
 			if (
-				(Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset + 6) && 
-				(Today.getUTCHours() < chrissiUtils.neopetsGMTOffset + 14)		// 2pm neopets time is 9pm same day UTC
-			){														// Set expiry to 2pm (9pm same day UTC)
-				expires.setUTCHours(Today.getUTCHours()+chrissiUtils.neopetsGMTOffset+14);
+				// 2pm neopets time is 9pm same day UTC
+				(now.getUTCHours() >= util.neopetsGMTOffset + 6) && 
+				(now.getUTCHours() < util.neopetsGMTOffset + 14)
+			){
+				// Set expiry to 2pm (9pm same day UTC)
+				expires.setUTCHours(now.getUTCHours()+util.neopetsGMTOffset+14);
 			} else
 			
 			
 			//Case after 2pm and before 10pm.
 			if (
-				(Today.getUTCHours() >= chrissiUtils.neopetsGMTOffset + 14) ||	// We use OR because it spans two days.
-				(Today.getUTCHours() < chrissiUtils.neopetsGMTOffset -2)			// 2pm neopets time is 9pm same day UTC
-			){														//10pm neopets time is 5am next day UTC								
+				// 2pm neopets time is 9pm same day UTC
+				(now.getUTCHours() >= util.neopetsGMTOffset + 14) ||
+				// OR is used because it spans two days.
+				//10pm neopets time is 5am next day UTC	
+				(now.getUTCHours() < util.neopetsGMTOffset -2)			
+			){																					
 				// Set expiry to 5am UTC tomorrow if it is before midnight UTC
 				
 				// Set expiry to 5am UTC same day if it is after midnight UTC.
@@ -567,15 +616,17 @@ function linkObject(ID, name, url, duration, listID){
 				// Set expiry to 1pm tomorrow if it is before midnight UTC.
 				// Set expiry to 1pm same day if it is after midnight UTC.
 			}
-		} else if (this.duration == "decemberdaily"){						// Advent calendar case	
+			
+		// Advent calendar case.
+		} else if (this.duration == "decemberdaily"){
 				expires.setSeconds(0);
 				expires.setMinutes(0);
-				expires.setUTCHours(chrissiUtils.neopetsGMTOffset);
-			if (Today.getUTCMonth() == 11){	
-				if (Today.getDate() == 30){
-					expires.setFullYear(Today.getFullYear()+1);
+				expires.setUTCHours(util.neopetsGMTOffset);
+			if (now.getUTCMonth() == 11){	
+				if (now.getDate() == 30){
+					expires.setFullYear(now.getFullYear()+1);
 				} else {
-				expires.setDate(Today.getUTCDate() +1);
+				expires.setDate(now.getUTCDate() +1);
 				}
 			} else {
 				expires.setDate(1);
@@ -583,143 +634,110 @@ function linkObject(ID, name, url, duration, listID){
 			}
 			
 			
-		} else {												// Duration as # of seconds case.
-			expires.setSeconds(Today.getSeconds() + this.duration);
+		// Duration as # of seconds case (my favourite!  So easy!)
+		} else {
+			expires.setSeconds(now.getSeconds() + this.duration);
 		}
-			return expires;
-	}
-
-
-	this.clickedExpiresString =
-		"list" + this.listID.toString() +
-		"_link" + this.ID.toString() +
-		"_clicked_expires";
 		
-	// Store link click info
-	this.addClickedExpiresInfo = function(){
-		chrissiUtils.storage(
+		// Set and store the timer as a date.	
+		this.timer = expires;	
+		util.storage(
 			this.clickedExpiresString,
-			this.availableDate().toUTCString(),
+			this.timer.toUTCString(),
 			Math.floor(
-				(this.availableDate().getTime() - chrissiUtils.Today().getTime())
+				(this.timer.getTime() - now.getTime())
 				/ 1000)
 		);
-	}
-	// Remove clicked expires info.
-	this.removeClickedExpiresInfo = function(){	
-		chrissiUtils.storage( this.clickedExpiresString , null );
-	}
-	
-	// Get the clicked expires date.
-	this.clickedExpires = function(){
-		if (chrissiUtils.storage(this.clickedExpiresString)){
-			return new Date(chrissiUtils.storage(this.clickedExpiresString));
-		} else {
-			return chrissiUtils.Today();
-		}
-	}
-	// Generate and return the structure of the list element.  Does not add to
-	// DOM, just generates and returns a jquery object.
-	this.elementHTML = function(){			
-		var listEntry = $(
-			"<tr id='list" + this.listID.toString() +
-			"_link" + this.ID.toString() + "'></tr>"
-		);
-		if (this.nextIn() > 0){
-			$(listEntry).addClass("unavailable");
-		}
-		$(listEntry).append(
-			"<td class='remove'><button class='btn small'>-</button></td>" +
-			"<td class='link'><a href='" + this.url + "'>" + this.name + "</a></td>" +
-			"<td class='timer'>" + this.nextInString() + "</td>" +
-			"<td><button class='add btn primary small'>Done!</button><button class='remove btn small'>Oops!</button></td>"
-		);
-		return $(listEntry);
-	}
-	
-	
-	// Returns the # of seconds from now that the link is available again.
-	// Used to find the next available date when stored doesn't exist and the
-	// link is not clicked.
-	// Usually zero...
-	this.nextIn = function(){	
-		var now = new Date();
-		if (chrissiUtils.storage(this.clickedExpiresString) !== null) {
-			var available = this.clickedExpires();
-			var ourExpiry = new Date(available);
-			if (ourExpiry.getTime() - now.getTime() > 0){
-				return Math.floor((ourExpiry.getTime() - now.getTime())/1000);
-			} else {
-				return 0;
-		}
-			
 
-		//} else if (this.duration == "decemberdaily"){
-		//	var DecFirst = new Date();
-		//	DecFirst.setMonth(11);
-		//	DecFirst.setDate(0);
-		//	DecFirst.setUTCHours(chrissiUtils.neopetsGMTOffset);
-		//	DecFirst.setMinutes(0);
-		//	DecFirst.setSeconds(0);
-		//	DecFirst.setMilliseconds(0);
-		//	if (Today.getTime() < DecFirst.getTime()){
-		//		return Math.floor((DecFirst.getTime() - Today.getTime())/1000);
-		//	} else {
-		//		return 0;
-		//	}
-		
-		} else {
-			return 0;
-		}
 	}
 	
-	this.nextInCached = this.nextIn();
+	this.setTimer = function(){
+		var now = new Date();
 		
-	// Returns the string to display in the page, for when the link is available again.
-	this.nextInString = function(){
-		return chrissiUtils.formatMS(this.nextIn());
+		// If the stored timer is active,
+		if (util.storage(this.clickedExpiresString) !== null){
+			var clickedExpires = new Date(util.storage(this.clickedExpiresString));
+			
+			// Update the timer property so we don't have to keep requesting it.
+			if (clickedExpires.getTime() > now.getTime()){
+				this.timer = clickedExpires;
+			} else {
+				
+				// And if the timer has expired, clean it up.
+				util.storage(this.clickedExpiresString, null);
+				this.timer = 0;
+			}
+			
+		// If the stored timer is not active, just update the property.
+		} else {
+			this.timer = 0;
+			
+		}
 	}
+	this.updatedTimer = function(){
+		var now = new Date();
+		if (this.timer > 0){
+			if (this.timer.getTime() - now.getTime() <= 0)
+			this.timer = 0;
+		}
+		return (this.timer <= 0)
+			? "00:00:00"
+			: util.formatMS(Math.floor(
+				(this.timer.getTime()
+				 - now.getTime())
+				/1000
+			));
+		}
 	
 	this.listItem = $("#list" + this.listID.toString() + "_link" + this.ID.toString());
 	
 	this.makeAvailable = function(){
-		this.listItem.removeClass('unavailable');
+		if ((this.listItem).hasClass('unavailable'))
+			this.listItem.removeClass('unavailable');
 	}
 	this.makeUnavailable = function(){
-		this.listItem.addClass('unavailable');
+		if (!((this.listItem).hasClass('unavailable')))
+			this.listItem.addClass('unavailable');
 	}	
-	this.updateTimer = function(){
-		$(this.timerElement).text(this.nextInString());
+	this.updateTimerDOM = function(){
+		$(this.timerElement).text(this.updatedTimer());
+		if (this.timer <= 0){
+			this.makeAvailable();	
+		} else {
+			this.makeUnavailable();
+		}
 	}	
 	this.buttonAction = function(createOrDelete){
 		if (createOrDelete === "delete"){
 			this.removeClickedExpiresInfo();
-			if (this.nextIn() <= 0){
+			this.setTimer();
+			if (this.timer <= 0){
 				this.makeAvailable();
 			}
 		} else if (createOrDelete === "create"){
+			this.newTimer();
 			this.addClickedExpiresInfo();
 			this.makeUnavailable();
 		}
-		this.updateTimer();			
+		this.updateTimerDOM();			
 	}
 }		
 
 var lists = [];
 
-chrissiUtils.pushLists();
+util.pushLists();
 
 $('body').click(function(clickEvent){
-	chrissiUtils.parseClick($(clickEvent.target));
+	util.parseClick($(clickEvent.target));
 });
 $('body').focusin(function(focusEvent){
 });
 $('body').focusout(function(focusEvent){
-    chrissiUtils.parseFcsOut($(focusEvent.target));
+    util.parseFcsOut($(focusEvent.target));
 });
 
 // Updates timers every second.
 setInterval( function () {
-	chrissiUtils.updateAllTimers();
+	util.updateAllTimers();
 	}, 1000
 );
