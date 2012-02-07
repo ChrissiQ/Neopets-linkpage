@@ -5,6 +5,10 @@ div.input, legend{
 div.form{
 	clear: both;
 }
+#lists-container{
+	float: left;
+	border: 1px solid black;
+}
 label{
 	text-align: right;
 	width: auto;
@@ -22,6 +26,7 @@ h2{
 }
 
 /* Table formatting */
+ 
 table, table tr, table tr td{
 	vertical-align: middle;
 }

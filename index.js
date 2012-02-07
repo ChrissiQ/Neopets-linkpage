@@ -1,4 +1,11 @@
-﻿var util = new function(){	//	Scoped utilities.
+﻿(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+
+
+var util = new function(){	//	Scoped utilities.
 	this.neopetsGMTOffset = 8;      // Constant, may change based on Daylight Savings, this is neopets time offset from GMT.	
 	this.Today = function(){
 		return new Date();
@@ -349,7 +356,7 @@ function listObject(ID, name, links){
 	// Initializes a new blank list in the DOM.
 	this.initialize = function(){
         this.ID = $.inArray(this, lists);
-		$('#infoColumn').before(this.blankList());
+		$('#lists-container').append(this.blankList());
 	}
   
     // Populates the list with information from a JSON file or cookie (newLinks).
